@@ -1,0 +1,11 @@
+src
+test
+coverage
+publish
+tsconfig.json
+tsd.json
+gulpfile.js
+.travis.yml
+.gitignore
+.vscode
+.publishrc
