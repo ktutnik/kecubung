@@ -10,33 +10,12 @@ export function getMethodNameFromCallee(callee) {
 }
 
 /**
- * require ArrayExpression
- */
-export function getDecorators(arrayExpression) {
-    let result = [];
-    for (let x of arrayExpression.elements) {
-        if (isReservedDecorator(x)) continue;
-        result.push(<MetaData>{
-            type: "Decorator",
-            name: getMethodNameFromCallee(x.callee),
-            analysis: AnalysisType.Valid,
-            children: x.arguments.map(arg => <MetaData>{
-                type: "Parameter",
-                name: getDecoratorParameterName(arg),
-                analysis: AnalysisType.Valid,
-                children: []
-            })
-        })
-    }
-    return result;
-}
-
-/**
  * require CallExpression 
  */
 export function isReservedDecorator(callExpression) {
     return getMethodNameFromCallee(callExpression.callee) == "__metadata"
         || getMethodNameFromCallee(callExpression.callee) == "__param"
+        || getMethodNameFromCallee(callExpression.callee) == "__decorate"
 }
 
 export function getDecoratorParameterName(param) {

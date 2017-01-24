@@ -1,10 +1,9 @@
-import { MetaDataFactory, MetaData, MetadataType, AnalysisType } from "./core"
-import { VisitorRegistry } from "./visitors"
+import * as Core from "./core"
 import { Transformer } from "./transformer"
 
-function transform(ast, fileName) {
-    let transformer = new Transformer(VisitorRegistry.getVisitor(new MetaDataFactory()))
-    return transformer.transform(ast, fileName);
+function transform(ast, fileName:string) {
+    let transformer = new Transformer(fileName)
+    return transformer.transform(ast);
 }
 
-export{transform, MetaData, MetadataType, AnalysisType}
+export{transform, Core}

@@ -22,10 +22,4 @@ export class ClassDecoratorAnalyzer{
             && this.node.right.type == SyntaxKind.CallExpression
             && HP.getMethodNameFromCallee(this.node.right.callee) == "__decorate"
     }
-
-    getDecorators():MetaData[]{
-        if(this.isDecorator())
-            return HP.getDecorators(this.node.right.arguments[0])
-        else return null;
-    }
 }

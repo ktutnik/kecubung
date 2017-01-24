@@ -43,7 +43,14 @@ export class ClassAnalyzer {
             && this.node.declarations[0].init
             && this.node.declarations[0].init.type == SyntaxKind.CallExpression
             && this.node.declarations[0].init.callee.type == SyntaxKind.FunctionExpression
+            && this.node.declarations[0].init.callee.body.type == SyntaxKind.BlockStatement
             && this.node.declarations[0].init.callee.id == null
+    }
+
+    getBaseClass(){
+        if(this.isCandidate() && this.node.declarations[0].init.arguments.length > 0){
+            return this.node.declarations[0].init.arguments[0].name
+        }
     }
 }
 
