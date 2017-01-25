@@ -1,14 +1,14 @@
 import * as Core from "../../src/core"
-import { TsChildDecorator } from "../../src/transformers/ts-child-decorator"
+import { TsChildDecoratorTransformer } from "../../src/transformers/ts-child-decorator"
 import { JsParser } from "../helper"
 import * as Chai from "chai"
 
 
-describe("TsChildDecorator", () => {
+describe("TsChildDecoratorTransformer", () => {
 
     it("Should identify parameter decorator properly", () => {
         let ast = JsParser.getAst(`tslib_1.__param(0, decoOne("param"))`)
-        let dummy = new TsChildDecorator();
+        let dummy = new TsChildDecoratorTransformer();
         let parent = <Core.MethodMetaData>{
             type: "Method",
             name: "myMethod",
@@ -39,7 +39,7 @@ describe("TsChildDecorator", () => {
 
     it("Should identify method decorator properly", () => {
         let ast = JsParser.getAst(`decoOne("param")`)
-        let dummy = new TsChildDecorator();
+        let dummy = new TsChildDecoratorTransformer();
         let parent = <Core.MethodMetaData>{
             type: "Method",
             name: "myMethod",
@@ -70,7 +70,7 @@ describe("TsChildDecorator", () => {
 
     it("Should not error if provided __metadata", () => {
         let ast = JsParser.getAst(`tslib_1.__metadata("design:type", Function)`)
-        let dummy = new TsChildDecorator();
+        let dummy = new TsChildDecoratorTransformer();
         let parent = <Core.MethodMetaData>{
             type: "Method",
             name: "myMethod",

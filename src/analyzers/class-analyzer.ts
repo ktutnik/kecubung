@@ -4,7 +4,7 @@ import * as HP from "./helper"
 export class ClassAnalyzer {
 
     /**
-     * expect AssignmentExpression, ExpressionStatement
+     * expect VariableDeclaration, ExpressionStatement
      */
     constructor(private node) { }
 
@@ -42,9 +42,6 @@ export class ClassAnalyzer {
             return null;
     }
 
-    /**
-     * expect VariableDeclaration
-     */
     isCandidate() {
         return this.node.type == SyntaxKind.VariableDeclaration
             && this.node.declarations[0].type == SyntaxKind.VariableDeclarator

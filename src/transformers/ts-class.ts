@@ -5,7 +5,7 @@ import { ParameterTransformer } from "./parameter"
 import * as Core from "../core"
 
 export class TsClassTransformer extends Core.TransformerBase {
-
+    @Core.Call.when(Core.SyntaxKind.VariableDeclaration)
     transform(node, parent: Core.ParentMetaData) {
         let analyzer = new ClassAnalyzer(node);
         if (analyzer.isCandidate()) {

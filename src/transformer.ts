@@ -15,17 +15,13 @@ export class Transformer  {
             children: [],
             location: ast.loc.start
         }
-        let fileTransformer = new FileTransformer(this.fileName)
+        let fileTransformer = new FileTransformer()
         fileTransformer.transform(ast, file)
         return file;
     }
 }
 
 class FileTransformer extends TransformerBase {
-    constructor(private fileName: string) {
-        super()
-    }
-    
     transform(node, parent: MetaData) {
         this.traverse(node.program.body, parent, [
             new TsClassTransformer(),

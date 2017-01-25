@@ -32,12 +32,11 @@ export class TsModuleTransformer extends Core.TransformerBase {
         let connected = module.children.length > 0
             && module.children.some(x => Core.flag(x.analysis, Core.AnalysisType.Valid))
         let exported = analyzer.isExported(parent.type == "File" ? "exports" : parent.name);
-        let analysis = Core.AnalysisType.Candidate;
         if (exported)
-            analysis |= Core.AnalysisType.Exported;
+            module.analysis |= Core.AnalysisType.Exported;
         if (connected)
-            analysis |= Core.AnalysisType.ConnectedWithChildren
+            module.analysis |= Core.AnalysisType.ConnectedWithChildren
         if (exported && connected)
-            analysis |= Core.AnalysisType.Valid
+            module.analysis |= Core.AnalysisType.Valid
     }
 }

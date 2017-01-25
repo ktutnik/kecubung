@@ -25,7 +25,7 @@ describe("TsClassTransformer", () => {
         }
         dummy.transform(ast, parent);
         let clazz = <Core.ClassMetaData>parent.children[0];
-        Chai.expect(clazz).deep.eq(<Core.ClassMetaData><Core.ClassMetaData>{
+        Chai.expect(clazz).deep.eq(<Core.ClassMetaData>{
             type: "Class",
             name: "MyClass",
             baseClass: null,
@@ -83,7 +83,7 @@ describe("TsClassTransformer", () => {
         }
         dummy.transform(ast, parent);
         let clazz = <Core.ClassMetaData>parent.children[0];
-        Chai.expect(clazz).deep.eq(<Core.ClassMetaData><Core.ClassMetaData>{
+        Chai.expect(clazz).deep.eq(<Core.ClassMetaData>{
             type: "Class",
             name: "MyClass",
             baseClass: "MyBaseClass",

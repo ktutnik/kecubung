@@ -2,7 +2,7 @@ import * as H from "../analyzers/helper"
 import * as Core from "../core"
 
 
-export class TsChildDecorator extends Core.TransformerBase {
+export class TsChildDecoratorTransformer extends Core.TransformerBase {
     @Core.Call.when(Core.SyntaxKind.CallExpression)
     transform(node, parent: Core.MethodMetaData | Core.ClassMetaData) {
         if (!H.isReservedDecorator(node)) {
