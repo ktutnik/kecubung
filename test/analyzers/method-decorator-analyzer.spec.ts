@@ -16,7 +16,7 @@ describe("Method Decorator Analyzer", () => {
                     tslib_1.__metadata("design:returntype", void 0)
                 ], MyClass.prototype, "myMethod", null);
             `)
-            let dummy = new MethodDecoratorAnalyzer(ast.expression)
+            let dummy = new MethodDecoratorAnalyzer(ast)
             Chai.expect(dummy.isDecorator()).eq(true);
         })
         it("Should identify class decorator without tslib", () => {
@@ -29,7 +29,7 @@ describe("Method Decorator Analyzer", () => {
                     __metadata("design:returntype", void 0)
                 ], MyClass.prototype, "myMethod", null);
             `)
-            let dummy = new MethodDecoratorAnalyzer(ast.expression)
+            let dummy = new MethodDecoratorAnalyzer(ast)
             Chai.expect(dummy.isDecorator()).eq(true);
         })
     })
@@ -45,7 +45,7 @@ describe("Method Decorator Analyzer", () => {
                     tslib_1.__metadata("design:returntype", void 0)
                 ], MyClass.prototype, "myMethod", null);
             `)
-            let dummy = new MethodDecoratorAnalyzer(ast.expression)
+            let dummy = new MethodDecoratorAnalyzer(ast)
             Chai.expect(dummy.getClassName()).eq("MyClass");
         })
 
@@ -69,7 +69,7 @@ describe("Method Decorator Analyzer", () => {
                     tslib_1.__metadata("design:returntype", void 0)
                 ], MyClass.prototype, "myMethod", null);
             `)
-            let dummy = new MethodDecoratorAnalyzer(ast.expression)
+            let dummy = new MethodDecoratorAnalyzer(ast)
             Chai.expect(dummy.getMethodName()).eq("myMethod");
         })
 

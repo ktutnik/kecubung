@@ -4,17 +4,20 @@ import { ConstructorTransformer } from "./constructor"
 import { ParameterTransformer } from "./parameter"
 import * as Core from "../core"
 
-export class TypeScriptClassTransformer extends Core.TransformerBase {
+export class TsClassTransformer extends Core.TransformerBase {
 
-    transform(node, parent:Core.MetaData) {
+    transform(node, parent: Core.ParentMetaData) {
         let analyzer = new ClassAnalyzer(node);
         if (analyzer.isCandidate()) {
             let clazz = <Core.ClassMetaData>{
                 type: "Class",
                 name: analyzer.getName(),
                 baseClass: analyzer.getBaseClass(),
-                location: node.loc.start
+                location: node.loc.start,
+                analysis: Core.AnalysisType.Candidate
             }
+            if(!parent.children) parent.children = []
+            parent.children.push(clazz)
             this.traverse(node.declarations[0].init.callee.body.body, clazz, [
                 new MethodTransformer(),
                 new ConstructorTransformer()
@@ -23,14 +26,16 @@ export class TypeScriptClassTransformer extends Core.TransformerBase {
         }
     }
 
-    private analyse(clazz:Core.ClassMetaData, parent:Core.MetaData, analyzer:ClassAnalyzer){
+
+    private analyse(clazz: Core.ClassMetaData, parent: Core.MetaData, analyzer: ClassAnalyzer) {
+        /*
+        TS class is not valid *YET* here,
+        validation done on Module/File level
+        */
         let hasConstructor = clazz.constructor;
         let hasMethods = clazz.methods && clazz.methods.length > 0;
-        let isExported = analyzer.isExported(clazz.name, parent.name)
-        if(hasConstructor) clazz.analysis |= Core.AnalysisType.HasConstructor
-        if(hasMethods) clazz.analysis |= Core.AnalysisType.HasMethod;
-        if(isExported) clazz.analysis |= Core.AnalysisType.Exported;
-        if(hasMethods && isExported) clazz.analysis |= Core.AnalysisType.Valid
+        if (hasConstructor) clazz.analysis |= Core.AnalysisType.HasConstructor
+        if (hasMethods) clazz.analysis |= Core.AnalysisType.HasMethod;
     }
 }
 

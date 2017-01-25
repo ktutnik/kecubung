@@ -16,6 +16,7 @@ export class MethodTransformer extends Core.TransformerBase {
                 location: node.loc.start,
                 parameters: []
             }
+            if(!parent.methods) parent.methods = []
             parent.methods.push(method)
             this.traverse(node.expression.right.params, method, [
                 new ParameterTransformer()

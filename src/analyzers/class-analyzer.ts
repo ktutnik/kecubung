@@ -4,34 +4,42 @@ import * as HP from "./helper"
 export class ClassAnalyzer {
 
     /**
-     * expect AssignmentExpression, VariableDeclaration
+     * expect AssignmentExpression, ExpressionStatement
      */
     constructor(private node) { }
 
     /**
-     * expect AssignmentExpression
+     * expect ExpressionStatement
      */
     isExported(name, parentName) {
         return this.isExportedStatement()
-            && (this.node.left.object.name == parentName || this.node.left.object.name == "exports")
-            && this.node.right.name == name
+            && (this.node.expression.left.object.name == parentName || this.node.expression.left.object.name == "exports")
+            && this.node.expression.right.name == name
     }
 
     /**
-     * expect AssignmentExpression
+     * expect ExpressionStatement
      */
     private isExportedStatement() {
-        return this.node.type == SyntaxKind.AssignmentExpression
-            && this.node.left.type == SyntaxKind.MemberExpression
-            && this.node.right.type == SyntaxKind.Identifier
+        return this.node.type == SyntaxKind.ExpressionStatement
+            && this.node.expression.type == SyntaxKind.AssignmentExpression
+            && this.node.expression.left.type == SyntaxKind.MemberExpression
+            && this.node.expression.right.type == SyntaxKind.Identifier
     }
 
     getName() {
         if (this.isExportedStatement())
-            return this.node.right.name;
+            return this.node.expression.right.name;
         else if (this.isCandidate())
             return this.node.declarations[0].id.name
         else return null;
+    }
+
+    getParentName() {
+        if (this.isExportedStatement())
+            return this.node.expression.left.object.name;
+        else
+            return null;
     }
 
     /**
@@ -47,10 +55,14 @@ export class ClassAnalyzer {
             && this.node.declarations[0].init.callee.id == null
     }
 
-    getBaseClass(){
-        if(this.isCandidate() && this.node.declarations[0].init.arguments.length > 0){
-            return this.node.declarations[0].init.arguments[0].name
+    getBaseClass() {
+        if (this.isCandidate() && this.node.declarations[0].init.arguments.length > 0) {
+            if (this.node.declarations[0].init.arguments[0].type == SyntaxKind.MemberExpression)
+                return this.node.declarations[0].init.arguments[0].property.name;
+            else
+                return this.node.declarations[0].init.arguments[0].name
         }
+        return null;
     }
 }
 

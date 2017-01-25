@@ -17,7 +17,6 @@ export class TsChildDecorator extends Core.TransformerBase {
     }
 
     private transformMethod(node, parent: Core.MethodMetaData|Core.ClassMetaData) {
-        if (!parent.decorators) parent.decorators = []
         let method = <Core.DecoratorMetaData>{
             type: "Decorator",
             name: node.callee.name,
@@ -25,11 +24,11 @@ export class TsChildDecorator extends Core.TransformerBase {
             location: node.loc.start,
             parameters: node.arguments.map(x => this.getParameter(x))
         }
+        if (!parent.decorators) parent.decorators = []
         parent.decorators.push(method)
     }
 
     private transformParameter(node, parameter: Core.ParameterMetaData) {
-        if (!parameter.decorators) parameter.decorators = []
         let decorator = <Core.DecoratorMetaData>{
             type: "Decorator",
             name: H.getMethodNameFromCallee(node.arguments[1].callee),
@@ -38,6 +37,7 @@ export class TsChildDecorator extends Core.TransformerBase {
             parameters: node.arguments[1].arguments
                 .map(x => this.getParameter(x))
         };
+        if (!parameter.decorators) parameter.decorators = []
         parameter.decorators.push(decorator)
     }
 

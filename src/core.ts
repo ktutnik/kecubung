@@ -59,18 +59,6 @@ export interface ParentMetaData extends MetaData{
     children: MetaData[]
 }
 
-export interface Visitor {
-    start(node, meta: MetaData, metaParent: MetaData): MetaData
-    exit(node, meta: MetaData, metaParent: MetaData): MetaData
-}
-
-export class MetaDataFactory{
-    create(node, meta:MetaData, metaParent:MetaData): MetaData{
-        meta.location = node.loc.start;
-        return meta;
-    }
-}
-
 export module SyntaxKind {
     export const File = "File"
     export const Program = "Program"

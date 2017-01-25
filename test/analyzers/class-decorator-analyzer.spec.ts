@@ -13,7 +13,7 @@ describe("Class Decorator Analyzer", () => {
                 tslib_1.__metadata("design:paramtypes", [])
             ], MyClass);
         `)
-            let dummy = new ClassDecoratorAnalyzer(ast.expression)
+            let dummy = new ClassDecoratorAnalyzer(ast)
             Chai.expect(dummy.isDecorator()).eq(true);
         })
 
@@ -24,7 +24,7 @@ describe("Class Decorator Analyzer", () => {
                 __metadata("design:paramtypes", [])
             ], MyClass);
         `)
-            let dummy = new ClassDecoratorAnalyzer(ast.expression)
+            let dummy = new ClassDecoratorAnalyzer(ast)
             Chai.expect(dummy.isDecorator()).eq(true);
         })
     })
@@ -37,7 +37,7 @@ describe("Class Decorator Analyzer", () => {
                 tslib_1.__metadata("design:paramtypes", [])
             ], MyClass);
         `)
-            let dummy = new ClassDecoratorAnalyzer(ast.expression)
+            let dummy = new ClassDecoratorAnalyzer(ast)
             Chai.expect(dummy.getClassName()).eq("MyClass");
         })
 

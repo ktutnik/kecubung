@@ -4,7 +4,7 @@ import * as Core from "../core"
 
 
 export class ConstructorTransformer extends Core.TransformerBase {
-    @Core.Call.when(Core.SyntaxKind.ExpressionStatement)
+    @Core.Call.when(Core.SyntaxKind.FunctionDeclaration)
     transform(node, parent: Core.ClassMetaData) {
         if (node.type == Core.SyntaxKind.FunctionDeclaration
             && node.id.name == parent.name) {

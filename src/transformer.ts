@@ -1,7 +1,9 @@
 import { ClassAnalyzer } from "./analyzers/class-analyzer"
 import { MetaData, ParentMetaData, SyntaxKind, Call, TransformerBase, AnalysisType } from "./core"
-import { TypeScriptClassTransformer } from "./transformers/ts-class"
+import { TsClassTransformer } from "./transformers/ts-class"
 import { TsModuleTransformer } from "./transformers/ts-module"
+import { TsDecorator } from "./transformers/ts-decorator"
+import { TsClassExporterTransformer } from "./transformers/ts-class-export"
 
 export class Transformer  {
     constructor(private fileName: string) {}
@@ -26,8 +28,10 @@ class FileTransformer extends TransformerBase {
     
     transform(node, parent: MetaData) {
         this.traverse(node.program.body, parent, [
-            new TypeScriptClassTransformer(),
-            new TsModuleTransformer()
+            new TsClassTransformer(),
+            new TsModuleTransformer(),
+            new TsDecorator(),
+            new TsClassExporterTransformer()
         ])
     }
 }
