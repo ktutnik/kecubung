@@ -10,7 +10,7 @@ var gulp        = require("gulp"),
 //******** BUILD *************
 
 var tsProject = tsc.createProject("tsconfig.json", {
-    declaration: false,
+    declaration: true,
     noResolve: false,
     typescript: require("typescript") 
 });
