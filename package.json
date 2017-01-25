@@ -1,6 +1,6 @@
 {
   "name": "kecubung",
-  "version": "0.0.1",
+  "version": "0.0.2-0",
   "description": "Javascript transformer to Type Metadata",
   "main": "lib/index.js",
   "scripts": {
