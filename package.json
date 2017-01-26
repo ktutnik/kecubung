@@ -2,7 +2,7 @@
   "name": "kecubung",
   "version": "0.0.2-2",
   "description": "Javascript transformer to Type Metadata",
-  "main": "./lib/src/index.js",
+  "main": "./lib/source/index.js",
   "typings": "./lib/dts/index.d.ts",
   "scripts": {
     "test": "gulp",
