@@ -2,20 +2,20 @@
   "name": "kecubung",
   "version": "0.0.2-0",
   "description": "Javascript transformer to Type Metadata",
-  "main": "lib/index.js",
+  "main": "./lib/src/index.js",
+  "typings": "./lib/dts/index.d.ts",
   "scripts": {
     "test": "gulp",
-    "preversion": "npm test",
+    "preversion": "npm test && gulp dist",
     "postversion": "git push && git push --tags"
   },
-  "keywords": [],
+  "keywords": ["reflection", "metadata", "typesystem", "babylon", "typescript"],
   "author": "Ketut Sandiarsa <ktutnik@gmail.com>",
   "license": "MIT",
   "repository": {
     "type": "git",
     "url": "https://github.com/kambojajs/kecubung"
   },
-  "typings": "./lib/index.d.ts",
   "dependencies": {
     "reflect-metadata": "^0.1.9",
     "tslib": "^1.4.0"

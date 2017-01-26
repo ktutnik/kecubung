@@ -95,20 +95,32 @@ gulp.task("istanbul:hook", function () {
 });
 
 gulp.task("test", function (cb) {
-    runSequence("istanbul:hook", "mocha", cb);
+    runSequence("build", "istanbul:hook", "mocha", cb);
 });
 
 //******** DISTRIBUTION *************
-gulp.task("dist", function () {
+gulp.task("build-lib", function () {
     return gulp.src(["src/**/*.js", "src/**/*.d.ts"])
-        .pipe(gulp.dest("lib/"));
+        .pipe(gulp.dest("lib/src/"));
 });
 
-//******** DEFAULT *************
-gulp.task("default", function (cb) {
-    runSequence(
-        "build",
-        "test",
-        "dist",
-        cb);
-}); 
+var tsDtsProject = tsc.createProject("tsconfig.json", {
+    declaration: true,
+    noResolve: false,
+    typescript: require("typescript") 
+});
+
+gulp.task("build-dts", function() {
+    return gulp.src([
+        "src/**/*.ts"
+    ])
+    .pipe(tsDtsProject())
+    .on("error", function (err) {
+        process.exit(1);
+    })
+    .dts.pipe(gulp.dest("lib/dts"));
+});
+
+gulp.task("dist", function (cb) {
+    runSequence("clean-lib", "build", "build-lib", "build-dts", cb);
+});
