@@ -19,7 +19,7 @@ export class TsChildDecoratorTransformer extends Core.TransformerBase {
     private transformMethod(node, parent: Core.MethodMetaData|Core.ClassMetaData) {
         let method = <Core.DecoratorMetaData>{
             type: "Decorator",
-            name: node.callee.name,
+            name: H.getMethodNameFromCallee(node.callee),
             analysis: Core.AnalysisType.Valid,
             location: node.loc.start,
             parameters: node.arguments.map(x => this.getParameter(x))

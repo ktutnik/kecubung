@@ -1,13 +1,13 @@
 {
   "name": "kecubung",
-  "version": "0.0.2-1",
+  "version": "0.0.2-4",
   "description": "Javascript transformer to Type Metadata",
   "main": "./lib/source/index.js",
   "typings": "./lib/dts/index.d.ts",
   "scripts": {
     "test": "gulp",
     "preversion": "gulp",
-    "postversion": "git push && git push --tags"
+    "postversion": "git push origin master && git push origin master --tags"
   },
   "keywords": [
     "reflection",
