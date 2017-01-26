@@ -7,7 +7,7 @@
   "scripts": {
     "test": "gulp",
     "preversion": "gulp",
-    "postversion": "git push && git push --tags"
+    "postversion": "git push origin master && git push origin master --tags"
   },
   "keywords": [
     "reflection",
