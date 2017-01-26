@@ -68,6 +68,37 @@ describe("TsChildDecoratorTransformer", () => {
         });
     })
 
+    it.only("Should identify method decorator with member access", () => {
+        let ast = JsParser.getAst(`theModule.decoOne("param")`)
+        let dummy = new TsChildDecoratorTransformer();
+        let parent = <Core.MethodMetaData>{
+            type: "Method",
+            name: "myMethod",
+            analysis: Core.AnalysisType.Valid,
+            parameters: [<Core.ParameterMetaData>{
+                type: "Parameter",
+                name: "par1"
+            }]
+        }
+        dummy.transform(ast.expression, parent);
+        Chai.expect(parent.decorators[0]).deep.eq(<Core.DecoratorMetaData>{
+            type: "Decorator",
+            name: "decoOne",
+            analysis: Core.AnalysisType.Valid,
+            location: {
+                column: 0, line: 1
+            },
+            parameters: [<Core.MetaData>{
+                type:"Parameter",
+                name:"param",
+                analysis: Core.AnalysisType.Valid,
+                location: {
+                    column: 18, line: 1
+                }
+            }]
+        });
+    })
+
     it("Should not error if provided __metadata", () => {
         let ast = JsParser.getAst(`tslib_1.__metadata("design:type", Function)`)
         let dummy = new TsChildDecoratorTransformer();
