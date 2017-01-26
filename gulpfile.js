@@ -95,7 +95,7 @@ gulp.task("istanbul:hook", function () {
 });
 
 gulp.task("test", function (cb) {
-    runSequence("build", "istanbul:hook", "mocha", cb);
+    runSequence("istanbul:hook", "mocha", cb);
 });
 
 //******** DISTRIBUTION *************
@@ -122,5 +122,15 @@ gulp.task("build-dts", function() {
 });
 
 gulp.task("dist", function (cb) {
-    runSequence("clean-lib", "build", "build-lib", "build-dts", cb);
+    runSequence("build-lib", "build-dts", cb);
 });
+
+/** DEFAULT */
+gulp.task("default", function (cb) {
+    runSequence(
+        "clean",
+        "build",
+        "test",
+        "dist",
+        cb);
+}); 

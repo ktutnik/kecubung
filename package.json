@@ -6,7 +6,7 @@
   "typings": "./lib/dts/index.d.ts",
   "scripts": {
     "test": "gulp",
-    "preversion": "npm test && gulp dist",
+    "preversion": "gulp",
     "postversion": "git push && git push --tags"
   },
   "keywords": ["reflection", "metadata", "typesystem", "babylon", "typescript"],
