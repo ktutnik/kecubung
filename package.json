@@ -1,6 +1,6 @@
 {
   "name": "kecubung",
-  "version": "0.0.2-0",
+  "version": "0.0.2-1",
   "description": "Javascript transformer to Type Metadata",
   "main": "./lib/src/index.js",
   "typings": "./lib/dts/index.d.ts",
@@ -9,7 +9,13 @@
     "preversion": "gulp",
     "postversion": "git push && git push --tags"
   },
-  "keywords": ["reflection", "metadata", "typesystem", "babylon", "typescript"],
+  "keywords": [
+    "reflection",
+    "metadata",
+    "typesystem",
+    "babylon",
+    "typescript"
+  ],
   "author": "Ketut Sandiarsa <ktutnik@gmail.com>",
   "license": "MIT",
   "repository": {
