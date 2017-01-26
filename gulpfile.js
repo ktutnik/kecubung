@@ -101,7 +101,7 @@ gulp.task("test", function (cb) {
 //******** DISTRIBUTION *************
 gulp.task("build-lib", function () {
     return gulp.src(["src/**/*.js", "src/**/*.d.ts"])
-        .pipe(gulp.dest("lib/src/"));
+        .pipe(gulp.dest("lib/source/"));
 });
 
 var tsDtsProject = tsc.createProject("tsconfig.json", {
