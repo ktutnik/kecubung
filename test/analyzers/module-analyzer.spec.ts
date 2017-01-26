@@ -1,17 +1,17 @@
-import { AnalysisType, MetaData } from "../../src/core"
+import { AnalysisType, MetaData, SyntaxKind } from "../../src/core"
 import { ModuleAnalyzer } from "../../src/analyzers/module-analyzer"
 import { JsParser } from "../helper"
 import * as Chai from "chai"
 
 
-describe("Call Expression Analyzer", () => {
+describe("Module Analyzer", () => {
 
     describe("isCandidate", () => {
         it("Should identify module candidate properly", () => {
             let ast = JsParser.getAst(`
             (function (Children) {
             })(Children = Parent.Children || (Parent.Children = {}));`)
-            let dummy = new ModuleAnalyzer(ast.expression);
+            let dummy = new ModuleAnalyzer(ast);
             Chai.expect(dummy.isCandidate()).true;
         })
 
@@ -19,7 +19,7 @@ describe("Call Expression Analyzer", () => {
             let ast = JsParser.getAst(`
             (function (Children) {
             })(Children || (Children = {}));`)
-            let dummy = new ModuleAnalyzer(ast.expression);
+            let dummy = new ModuleAnalyzer(ast);
             Chai.expect(dummy.isCandidate()).eq(true);
         })
 
@@ -27,7 +27,7 @@ describe("Call Expression Analyzer", () => {
             let ast = JsParser.getAst(`
             (function () {
             })();`)
-            let dummy = new ModuleAnalyzer(ast.expression);
+            let dummy = new ModuleAnalyzer(ast);
             Chai.expect(dummy.isCandidate()).false;
         })
     })
@@ -37,7 +37,7 @@ describe("Call Expression Analyzer", () => {
             let ast = JsParser.getAst(`
             (function (Children) {
             })(Children = Parent.Children || (Parent.Children = {}));`)
-            let dummy = new ModuleAnalyzer(ast.expression);
+            let dummy = new ModuleAnalyzer(ast);
             Chai.expect(dummy.getName()).eq("Children");
         })
 
@@ -49,12 +49,23 @@ describe("Call Expression Analyzer", () => {
         })
     })
 
+    describe("getBody()", () => {
+        it("Should get module body properly", () => {
+            let ast = JsParser.getAst(`
+            (function (Children) {
+                (function(){})
+            })(Children = Parent.Children || (Parent.Children = {}));`)
+            let dummy = new ModuleAnalyzer(ast);
+            Chai.expect(dummy.getBody().length).eq(1);
+        })
+    })
+
     describe("isExported", () => {
         it("Should identify exported module", () => {
             let ast = JsParser.getAst(`
             (function (Children) {
             })(Children = exports.Children || (exports.Children = {}));`)
-            let dummy = new ModuleAnalyzer(ast.expression);
+            let dummy = new ModuleAnalyzer(ast);
             Chai.expect(dummy.isExported("")).eq(true);
         })
 
@@ -62,7 +73,7 @@ describe("Call Expression Analyzer", () => {
             let ast = JsParser.getAst(`
             (function (Children) {
             })(Children = Parent.Children || (Parent.Children = {}));`)
-            let dummy = new ModuleAnalyzer(ast.expression);
+            let dummy = new ModuleAnalyzer(ast);
             Chai.expect(dummy.isExported("Parent")).eq(true);
         })
 
@@ -70,7 +81,7 @@ describe("Call Expression Analyzer", () => {
             let ast = JsParser.getAst(`
             (function (Children) {
             })(Children || (Children = {}));`)
-            let dummy = new ModuleAnalyzer(ast.expression);
+            let dummy = new ModuleAnalyzer(ast);
             Chai.expect(dummy.isExported("Parent")).eq(false);
         })
 
@@ -78,7 +89,7 @@ describe("Call Expression Analyzer", () => {
             let ast = JsParser.getAst(`
                 require('tslib');
             `)
-            let dummy = new ModuleAnalyzer(ast.expression);
+            let dummy = new ModuleAnalyzer(ast);
             Chai.expect(dummy.isExported("")).eq(false);
         })
     })

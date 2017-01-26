@@ -19,24 +19,44 @@ export type MetadataType = "File" | "Module" | "Class"
     | "Function" | "Constructor"
 
 export interface MetaData {
-    type: MetadataType,
-    name: string,
-    analysis: AnalysisType,
-    children: MetaData[],
-    decorators?: MetaData[],
+    type: MetadataType
+    name: string
+    analysis: AnalysisType
     location?: {line: number, column: number}
 }
 
-export interface Visitor {
-    start(node, meta: MetaData, metaParent: MetaData): MetaData
-    exit(node, meta: MetaData, metaParent: MetaData): MetaData
+export interface DecoratorMetaData extends MetaData{
+    type: "Decorator"
+    parameters: MetaData[]
 }
 
-export class MetaDataFactory{
-    create(node, meta:MetaData, metaParent:MetaData): MetaData{
-        meta.location = node.loc.start;
-        return meta;
-    }
+export interface ParameterMetaData extends MetaData{
+    type: "Parameter"
+    decorators: DecoratorMetaData[]
+}
+
+export interface MethodMetaData extends MetaData{
+    type: "Method"
+    decorators: DecoratorMetaData[]
+    parameters: ParameterMetaData[]
+}
+
+export interface ConstructorMetaData extends MetaData{
+    type: "Constructor"
+    parameters: ParameterMetaData[]
+}
+
+export interface ClassMetaData extends MetaData{
+    type: "Class"
+    decorators: DecoratorMetaData[]
+    methods:MethodMetaData[]
+    baseClass:string
+    constructor: ConstructorMetaData
+}
+
+export interface ParentMetaData extends MetaData{
+    type: "Module" | "File"
+    children: MetaData[]
 }
 
 export module SyntaxKind {
@@ -65,13 +85,37 @@ export module SyntaxKind {
 
 export module Call {
     const META_DATA_KEY = "kamboja:Call.when";
-    export function when(...kinds: string[]) {
+    export function when(kind: string) {
         return function (target, method, descriptor) {
-            Reflect.defineMetadata(META_DATA_KEY, kinds, target, method);
+            Reflect.defineMetadata(META_DATA_KEY, kind, target, method);
         }
     }
 
     export function getWhen(target, methodName: string) {
-        return <string[]>Reflect.getMetadata(META_DATA_KEY, target, methodName);
+        return <string>Reflect.getMetadata(META_DATA_KEY, target, methodName);
+    }
+}
+
+export abstract class TransformerBase {
+    abstract transform(node, parent:MetaData)
+
+    protected traverse(children: any[], metaData:MetaData, transformers: TransformerBase[]) {
+        let calls = this.getCalls(transformers)
+        for(let child of children){
+            if(calls.some(x => x == child.type)){
+                for(let transformer of transformers){
+                    transformer.transform(child, metaData)
+                }
+            }
+        }
+    }
+
+    private getCalls(traversers:TransformerBase[]){
+        let calls:string[] = []
+        for(let traverser of traversers){
+            let cal = Call.getWhen(traverser, "transform"); 
+            calls.push(cal)
+        }
+        return calls;
     }
 }

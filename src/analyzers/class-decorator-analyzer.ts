@@ -2,30 +2,25 @@ import { SyntaxKind, MetaData } from "../core"
 import * as HP from "./helper"
 
 
-export class ClassDecoratorAnalyzer{
+export class ClassDecoratorAnalyzer {
 
     /**
-     * expect AssignmentExpression
+     * expect ExpressionStatement
      */
-    constructor(private node){}
+    constructor(private node) { }
 
-    getClassName(){
-        if (this.isDecorator()){
-            return this.node.left.name;
+    getClassName() {
+        if (this.isDecorator()) {
+            return this.node.expression.left.name;
         }
         else return null;
     }
 
     isDecorator() {
-        return this.node.type == SyntaxKind.AssignmentExpression
-            &&  this.node.left.type == SyntaxKind.Identifier
-            && this.node.right.type == SyntaxKind.CallExpression
-            && HP.getMethodNameFromCallee(this.node.right.callee) == "__decorate"
-    }
-
-    getDecorators():MetaData[]{
-        if(this.isDecorator())
-            return HP.getDecorators(this.node.right.arguments[0])
-        else return null;
+        return this.node.type == SyntaxKind.ExpressionStatement
+            && this.node.expression.type == SyntaxKind.AssignmentExpression
+            && this.node.expression.left.type == SyntaxKind.Identifier
+            && this.node.expression.right.type == SyntaxKind.CallExpression
+            && HP.getMethodNameFromCallee(this.node.expression.right.callee) == "__decorate"
     }
 }

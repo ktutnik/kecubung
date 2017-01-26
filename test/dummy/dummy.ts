@@ -8,10 +8,15 @@ function decoTwo(param: string) {
 
 export module MyModule {
 
-    @decoTwo("helo world!")
-    export class MyClass {
-        constructor() { }
+    export class MyBaseClass {
+        baseMethod(par1) { }
+    }
+
+    @decoTwo("halo")
+    export class MyClass extends MyBaseClass {
+        constructor() { super() }
         @decoOne()
         myMethod( @decoOne() par1) { }
     }
 }
+
