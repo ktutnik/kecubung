@@ -4,7 +4,7 @@
         "module": "commonjs",
         "target": "es5",
         "noImplicitAny": false,
-        "sourceMap": true,
+        "sourceMap": false,
         "experimentalDecorators": true,
         "emitDecoratorMetadata": true,
         "importHelpers": true

@@ -8,7 +8,7 @@ export class MethodAnalyzer {
      */
     constructor(private node) { }
 
-    
+
     isMethod(className: String) {
         return this.isMethodStatement()
             && this.node.expression.left.object.object.name == className
@@ -35,6 +35,16 @@ export class MethodAnalyzer {
         else return null;
     }
 
+    getLocation() {
+        return {
+            line: this.node.loc.start.line,
+            column: this.node.loc.start.column
+        };
+    }
+
+    getParameters(){
+        return this.node.expression.right.params;
+    }
 
     getParams() {
         if (this.isMethodStatement())

@@ -17,6 +17,18 @@ export class ClassAnalyzer {
             && this.node.expression.right.name == name
     }
 
+    getLocation() {
+        return {
+            line: this.node.loc.start.line,
+            column: this.node.loc.start.column
+        };
+    }
+
+    //constructors & methods
+    getMember(){
+        return this.node.declarations[0].init.callee.body.body;
+    }
+
     /**
      * expect ExpressionStatement
      */

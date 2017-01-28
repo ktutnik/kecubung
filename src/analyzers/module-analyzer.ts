@@ -33,6 +33,13 @@ export class ModuleAnalyzer {
             return null;
     }
 
+    getLocation(){
+        return {
+                    line: this.node.loc.start.line,
+                    column: this.node.loc.start.column
+                };
+    }
+
     isExported(parentName: string) {
         //(function(Children){})(Children = (Parent.Children) || ())
         //(function(Children){})(Children = (exports.Children) || ())

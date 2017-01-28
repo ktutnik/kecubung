@@ -1,4 +1,4 @@
-import { MethodAnalyzer } from "../analyzers/method-analyzer"
+import { ConstructorAnalyzer } from "../analyzers/constructor-analyser"
 import { ParameterTransformer } from "./parameter"
 import * as Core from "../core"
 
@@ -6,20 +6,17 @@ import * as Core from "../core"
 export class ConstructorTransformer extends Core.TransformerBase {
     @Core.Call.when(Core.SyntaxKind.FunctionDeclaration)
     transform(node, parent: Core.ClassMetaData) {
-        if (node.type == Core.SyntaxKind.FunctionDeclaration
-            && node.id.name == parent.name) {
+        let analyser = new ConstructorAnalyzer(node)
+        if (analyser.isConstructor(parent.name)) {
             let constructor = <Core.ConstructorMetaData>{
                 type: "Constructor",
-                name: node.id.name,
+                name: analyser.getName(),
                 analysis: Core.AnalysisType.Valid,
-                location: {
-                    line: node.loc.start.line,
-                    column: node.loc.start.column
-                },
+                location: analyser.getLocation(),
                 parameters: []
             }
             parent.constructor = constructor;
-            this.traverse(node.params, constructor, [
+            this.traverse(analyser.getParameters(), constructor, [
                 new ParameterTransformer()
             ])
         }

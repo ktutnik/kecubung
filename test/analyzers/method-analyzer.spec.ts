@@ -15,6 +15,13 @@ describe("Method Analyzer", () => {
         let ast = JsParser.getAst(`MyClass.prototype.myMethod = function(){}`)
         let dummy = new MethodAnalyzer(ast)
         Chai.expect(dummy.getName()).eq("myMethod");
+        Chai.expect(dummy.getParameters().length).eq(0);
+    })
+
+    it("Should return parameters properly", () => {
+        let ast = JsParser.getAst(`MyClass.prototype.myMethod = function(par1, par2){}`)
+        let dummy = new MethodAnalyzer(ast)
+        Chai.expect(dummy.getParameters().length).eq(2);
     })
 
     it("getName() should not error when supplied different syntax", () => {
@@ -48,4 +55,6 @@ describe("Method Analyzer", () => {
         let dummy = new MethodAnalyzer(ast)
         Chai.expect(dummy.getParams()).null;
     })
+
+
 })

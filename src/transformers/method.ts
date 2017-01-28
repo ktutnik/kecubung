@@ -13,15 +13,12 @@ export class MethodTransformer extends Core.TransformerBase {
                 type: "Method",
                 name: analyzer.getName(),
                 analysis: Core.AnalysisType.Valid,
-                location: {
-                    line: node.loc.start.line,
-                    column: node.loc.start.column
-                },
+                location: analyzer.getLocation(),
                 parameters: []
             }
             if(!parent.methods) parent.methods = []
             parent.methods.push(method)
-            this.traverse(node.expression.right.params, method, [
+            this.traverse(analyzer.getParameters(), method, [
                 new ParameterTransformer()
             ])
         }

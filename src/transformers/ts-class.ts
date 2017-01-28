@@ -13,15 +13,12 @@ export class TsClassTransformer extends Core.TransformerBase {
                 type: "Class",
                 name: analyzer.getName(),
                 baseClass: analyzer.getBaseClass(),
-                location: {
-                    line: node.loc.start.line,
-                    column: node.loc.start.column
-                },
+                location: analyzer.getLocation(),
                 analysis: Core.AnalysisType.Candidate
             }
             if(!parent.children) parent.children = []
             parent.children.push(clazz)
-            this.traverse(node.declarations[0].init.callee.body.body, clazz, [
+            this.traverse(analyzer.getMember(), clazz, [
                 new MethodTransformer(),
                 new ConstructorTransformer()
             ])
