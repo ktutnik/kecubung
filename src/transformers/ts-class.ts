@@ -13,7 +13,10 @@ export class TsClassTransformer extends Core.TransformerBase {
                 type: "Class",
                 name: analyzer.getName(),
                 baseClass: analyzer.getBaseClass(),
-                location: node.loc.start,
+                location: {
+                    line: node.loc.start.line,
+                    column: node.loc.start.column
+                },
                 analysis: Core.AnalysisType.Candidate
             }
             if(!parent.children) parent.children = []

@@ -14,7 +14,10 @@ export class TsModuleTransformer extends Core.TransformerBase {
                 type: "Module",
                 analysis: Core.AnalysisType.Candidate,
                 children: [],
-                location: node.loc.start,
+                location: {
+                    line: node.loc.start.line,
+                    column: node.loc.start.column
+                },
                 name: analyzer.getName()
             }
             parent.children.push(module);

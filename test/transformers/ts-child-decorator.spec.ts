@@ -68,7 +68,7 @@ describe("TsChildDecoratorTransformer", () => {
         });
     })
 
-    it.only("Should identify method decorator with member access", () => {
+    it("Should identify method decorator with member access", () => {
         let ast = JsParser.getAst(`theModule.decoOne("param")`)
         let dummy = new TsChildDecoratorTransformer();
         let parent = <Core.MethodMetaData>{

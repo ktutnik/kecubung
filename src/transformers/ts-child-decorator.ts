@@ -9,19 +9,22 @@ export class TsChildDecoratorTransformer extends Core.TransformerBase {
             this.transformMethod(node, parent)
         }
         else if (H.getMethodNameFromCallee(node.callee) == "__param"
-            && parent.type == "Method" 
+            && parent.type == "Method"
             && parent.parameters.length > 0) {
             let parameter = parent.parameters[parseInt(node.arguments[0].value)]
             this.transformParameter(node, parameter)
         }
     }
 
-    private transformMethod(node, parent: Core.MethodMetaData|Core.ClassMetaData) {
+    private transformMethod(node, parent: Core.MethodMetaData | Core.ClassMetaData) {
         let method = <Core.DecoratorMetaData>{
             type: "Decorator",
             name: H.getMethodNameFromCallee(node.callee),
             analysis: Core.AnalysisType.Valid,
-            location: node.loc.start,
+            location: {
+                line: node.loc.start.line,
+                column: node.loc.start.column
+            },
             parameters: node.arguments.map(x => this.getParameter(x))
         }
         if (!parent.decorators) parent.decorators = []
@@ -33,7 +36,10 @@ export class TsChildDecoratorTransformer extends Core.TransformerBase {
             type: "Decorator",
             name: H.getMethodNameFromCallee(node.arguments[1].callee),
             analysis: Core.AnalysisType.Valid,
-            location: node.loc.start,
+            location: {
+                line: node.loc.start.line,
+                column: node.loc.start.column
+            },
             parameters: node.arguments[1].arguments
                 .map(x => this.getParameter(x))
         };
@@ -46,7 +52,10 @@ export class TsChildDecoratorTransformer extends Core.TransformerBase {
             type: "Parameter",
             name: H.getDecoratorParameterName(x),
             analysis: Core.AnalysisType.Valid,
-            location: x.loc.start
+            location: {
+                line: x.loc.start.line,
+                column: x.loc.start.column
+            },
         };
     }
 }

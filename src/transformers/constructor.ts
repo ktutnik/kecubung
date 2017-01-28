@@ -12,7 +12,10 @@ export class ConstructorTransformer extends Core.TransformerBase {
                 type: "Constructor",
                 name: node.id.name,
                 analysis: Core.AnalysisType.Valid,
-                location: node.loc.start,
+                location: {
+                    line: node.loc.start.line,
+                    column: node.loc.start.column
+                },
                 parameters: []
             }
             parent.constructor = constructor;
