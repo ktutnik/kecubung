@@ -13,7 +13,7 @@ describe("Transformer", () => {
         it("Should transform TypeScript generated file properly", () => {
             let filename = "./dummy/dummy.js"
             let code = Fs.readFileSync(Path.join(__dirname, filename)).toString()
-            let dummy = new Transformer(filename);
+            let dummy = new Transformer(filename, "ASTree");
             let ast = Babylon.parse(code);
             let result = dummy.transform(ast);
             Chai.expect(result).deep.eq({
@@ -29,14 +29,14 @@ describe("Transformer", () => {
                         type: 'Class',
                         name: 'MyBaseClass',
                         baseClass: null,
-                        location: { line: 21, column: 4 },
+                        location: { start: 456, end: 633 },
                         analysis: 31,
                         constructor:
                         {
                             type: 'Constructor',
                             name: 'MyBaseClass',
                             analysis: 1,
-                            location: { line: 22, column: 8 },
+                            location: { start: 497, end: 531 },
                             parameters: []
                         },
                         methods:
@@ -44,13 +44,13 @@ describe("Transformer", () => {
                             type: 'Method',
                             name: 'baseMethod',
                             analysis: 1,
-                            location: { line: 24, column: 8 },
+                            location: { start: 540, end: 595 },
                             parameters:
                             [{
                                 type: 'Parameter',
                                 name: 'par1',
                                 analysis: 1,
-                                location: { line: 24, column: 53 }
+                                location: { start: 585, end: 589 }
                             }]
                         }]
                     },
@@ -58,14 +58,14 @@ describe("Transformer", () => {
                         type: 'Class',
                         name: 'MyClass',
                         baseClass: 'MyBaseClass',
-                        location: { line: 28, column: 4 },
+                        location: { start: 678, end: 944 },
                         analysis: 31,
                         constructor:
                         {
                             type: 'Constructor',
                             name: 'MyClass',
                             analysis: 1,
-                            location: { line: 30, column: 8 },
+                            location: { start: 765, end: 841 },
                             parameters: []
                         },
                         methods:
@@ -73,19 +73,19 @@ describe("Transformer", () => {
                             type: 'Method',
                             name: 'myMethod',
                             analysis: 1,
-                            location: { line: 33, column: 8 },
+                            location: { start: 850, end: 899 },
                             parameters:
                             [{
                                 type: 'Parameter',
                                 name: 'par1',
                                 analysis: 1,
-                                location: { line: 33, column: 47 },
+                                location: { start: 889, end: 893 },
                                 decorators:
                                 [{
                                     type: 'Decorator',
                                     name: 'decoOne',
                                     analysis: 1,
-                                    location: { line: 38, column: 8 },
+                                    location: { start: 997, end: 1026 },
                                     parameters: []
                                 }]
                             }],
@@ -94,7 +94,7 @@ describe("Transformer", () => {
                                 type: 'Decorator',
                                 name: 'decoOne',
                                 analysis: 1,
-                                location: { line: 37, column: 8 },
+                                location: { start: 978, end: 987 },
                                 parameters: []
                             }]
                         }],
@@ -103,33 +103,33 @@ describe("Transformer", () => {
                             type: 'Decorator',
                             name: 'decoTwo',
                             analysis: 1,
-                            location: { line: 44, column: 8 },
+                            location: { start: 1284, end: 1299 },
                             parameters:
                             [{
                                 type: 'Parameter',
                                 name: 'halo',
                                 analysis: 1,
-                                location: { line: 44, column: 16 }
+                                location: { start: 1284, end: 1299 }
                             }]
                         }]
                     }],
-                    location: { line: 20, column: 0 },
+                    location: { start: 429, end: 1461 },
                     name: 'MyModule'
                 }],
-                location: { line: 1, column: 0 }
+                location: { start: 0, end: 1462 }
             })
         })
 
-        it("Should transform big file", () => {
+        it("Should transform TypeScript (4.5 MB) file in less than 500ms", () => {
             let filename = "./node_modules/typescript/lib/typescript.js"
             let code = Fs.readFileSync(Path.join(process.cwd(), filename)).toString()
-            let dummy = new Transformer(filename);
-            console.time("execution");
+            let dummy = new Transformer(filename, "ASTree");
             let ast = Babylon.parse(code);
-            console.timeEnd("execution")
+            let start = new Date()
             let result = dummy.transform(ast);
-            //console.log(Util.inspect(result, false, null))
-            //Chai.expect(result).eq(null)
+            let end = new Date();
+            let gap = end.getTime() - start.getTime();
+            Chai.expect(gap).lessThan(500)
         })
     })
 })

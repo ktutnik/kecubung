@@ -1,11 +1,16 @@
 import * as Core from "../core"
-import {ParameterAnalyzer} from "../analyzers/parameter-analyzer"
+import * as Analyzer from "../analyzers"
 
 export class ParameterTransformer extends Core.TransformerBase {
+    constructor(private parserType: Analyzer.ParserType) {
+        super()
+    }
+    
     @Core.Call.when(Core.SyntaxKind.Identifier)
     transform(node, parent: Core.MethodMetaData | Core.ConstructorMetaData) {
         if (!parent.parameters) parent.parameters = []
-        let analyzer = new ParameterAnalyzer(node)
+        let analyzer = <Analyzer.ParameterAnalyzer>Analyzer
+            .get(this.parserType, Analyzer.AnalyzerType.Parameter, node)
         parent.parameters.push(<Core.ParameterMetaData>{
             type: "Parameter",
             name: analyzer.getName(),

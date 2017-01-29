@@ -1,4 +1,4 @@
-import { SyntaxKind } from "../core"
+import { SyntaxKind, SourceLocation } from "../../core"
 import * as MH from "./helper"
 
 
@@ -36,9 +36,9 @@ export class MethodAnalyzer {
     }
 
     getLocation() {
-        return {
-            line: this.node.loc.start.line,
-            column: this.node.loc.start.column
+        return <SourceLocation> {
+            start: this.node.start,
+            end: this.node.end
         };
     }
 

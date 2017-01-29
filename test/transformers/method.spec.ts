@@ -10,7 +10,7 @@ describe("MethodTransformer", () => {
         let ast = JsParser.getAst(`
         MyClass.prototype.myMethod = function (par1) { };
         `)
-        let dummy = new MethodTransformer();
+        let dummy = new MethodTransformer("ASTree");
         let parent = <Core.ClassMetaData>{
             type: "Class",
             name: "MyClass",
@@ -23,13 +23,13 @@ describe("MethodTransformer", () => {
             name: "myMethod",
             analysis: Core.AnalysisType.Valid,
             location: {
-                column: 8, line: 2
+                start: 9, end: 58
             },
             parameters: [<Core.ParameterMetaData>{
                 type: "Parameter",
                 name: "par1",
                 location: {
-                    column: 47, line: 2
+                    start: 48, end: 52
                 },
                 analysis: Core.AnalysisType.Valid,
             }]

@@ -1,4 +1,4 @@
-import { SyntaxKind, MetaData, AnalysisType } from "../core"
+import { SyntaxKind, MetaData, AnalysisType } from "../../core"
 
 /**
  * require CallExpression.callee

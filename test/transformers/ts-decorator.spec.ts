@@ -16,7 +16,7 @@ describe("TsDecorator", () => {
             tslib_1.__metadata("design:returntype", void 0)
         ], MyClass.prototype, "myMethod", null);
         `)
-        let dummy = new TsDecorator();
+        let dummy = new TsDecorator("ASTree");
         let parent = <Core.ParentMetaData>{
             type: "Module",
             name: "MyModule",
@@ -43,14 +43,14 @@ describe("TsDecorator", () => {
             name: "decoOne",
             analysis: Core.AnalysisType.Valid,
             location: {
-                column: 12, line: 3
+                start: 42, end: 58
             },
             parameters: [<Core.MetaData>{
                 type: "Parameter",
                 name: "param",
                 analysis: Core.AnalysisType.Valid,
                 location: {
-                    column: 20, line: 3
+                    start: 42, end: 58
                 }
             }]
         });
@@ -63,7 +63,7 @@ describe("TsDecorator", () => {
             tslib_1.__metadata("design:paramtypes", [])
         ], MyClass);
         `)
-        let dummy = new TsDecorator();
+        let dummy = new TsDecorator("ASTree");
         let parent = <Core.ParentMetaData>{
             type: "Module",
             name: "MyModule",
@@ -82,14 +82,14 @@ describe("TsDecorator", () => {
             name: "decoOne",
             analysis: Core.AnalysisType.Valid,
             location: {
-                column: 12, line: 3
+                start: 52, end: 68
             },
             parameters: [<Core.MetaData>{
                 type: "Parameter",
                 name: "param",
                 analysis: Core.AnalysisType.Valid,
                 location: {
-                    column: 20, line: 3
+                    start: 52, end: 68
                 }
             }]
         });
@@ -106,7 +106,7 @@ describe("TsDecorator", () => {
             return MyClass;
         }());
         `)
-        let dummy = new TsDecorator();
+        let dummy = new TsDecorator("ASTree");
         let parent = <Core.ParentMetaData>{
             type: "Module",
             name: "MyModule",

@@ -1,11 +1,16 @@
-import { ChildDecoratorAnalyzer } from "../analyzers/child-decorator-analyzer"
+import * as Analyzer from "../analyzers"
 import * as Core from "../core"
 
 
 export class TsChildDecoratorTransformer extends Core.TransformerBase {
+    constructor(private parserType: Analyzer.ParserType) {
+        super()
+    }
+    
     @Core.Call.when(Core.SyntaxKind.CallExpression)
     transform(node, parent: Core.MethodMetaData | Core.ClassMetaData) {
-        let analyzers = new ChildDecoratorAnalyzer(node)
+        let analyzers = <Analyzer.ChildDecoratorAnalyzer>Analyzer
+            .get(this.parserType, Analyzer.AnalyzerType.ChildDecorator, node)
         if (analyzers.isMethodDecorator()) {
             this.transformMethod(analyzers, parent)
         }
@@ -17,7 +22,7 @@ export class TsChildDecoratorTransformer extends Core.TransformerBase {
         }
     }
 
-    private transformMethod(analyzer: ChildDecoratorAnalyzer, parent: Core.MethodMetaData | Core.ClassMetaData) {
+    private transformMethod(analyzer: Analyzer.ChildDecoratorAnalyzer, parent: Core.MethodMetaData | Core.ClassMetaData) {
         let method = <Core.DecoratorMetaData>{
             type: "Decorator",
             name: analyzer.getMethodName(),
@@ -29,7 +34,7 @@ export class TsChildDecoratorTransformer extends Core.TransformerBase {
         parent.decorators.push(method)
     }
 
-    private transformParameter(analyzer: ChildDecoratorAnalyzer, parameter: Core.ParameterMetaData) {
+    private transformParameter(analyzer: Analyzer.ChildDecoratorAnalyzer, parameter: Core.ParameterMetaData) {
         let decorator = <Core.DecoratorMetaData>{
             type: "Decorator",
             name: analyzer.getParameterDecoratorName(),

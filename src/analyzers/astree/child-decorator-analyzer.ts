@@ -1,5 +1,5 @@
-import { SyntaxKind, MethodMetaData, MetaData, AnalysisType } from "../core"
-import * as H from "../analyzers/helper"
+import { SyntaxKind, MethodMetaData, MetaData, AnalysisType, SourceLocation } from "../../core"
+import * as H from "./helper"
 
 
 export class ChildDecoratorAnalyzer {
@@ -18,30 +18,30 @@ export class ChildDecoratorAnalyzer {
     }
 
     getMethodLocation() {
-        return {
-            line: this.node.loc.start.line,
-            column: this.node.loc.start.column
+        return <SourceLocation>{
+            start: this.node.start,
+            end: this.node.end
         }
     }
 
-    getMethodParameters(){
+    getMethodParameters() {
         return this.node.arguments.map(x => this.getParameter(x));
     }
 
-    getParameterDecoratorName(){
+    getParameterDecoratorName() {
         return H.getMethodNameFromCallee(this.node.arguments[1].callee);
     }
 
-    getParameterDecoratorLocation(){
-        return {
-                line: this.node.loc.start.line,
-                column: this.node.loc.start.column
-            };
+    getParameterDecoratorLocation() {
+        return <SourceLocation>{
+            start: this.node.start,
+            end: this.node.end
+        }
     }
 
-    getParameterDecoratorParameters(){
+    getParameterDecoratorParameters() {
         return this.node.arguments[1].arguments
-                .map(x => this.getParameter(x));
+            .map(x => this.getParameter(x));
     }
 
 
@@ -50,9 +50,9 @@ export class ChildDecoratorAnalyzer {
             type: "Parameter",
             name: H.getDecoratorParameterName(x),
             analysis: AnalysisType.Valid,
-            location: {
-                line: x.loc.start.line,
-                column: x.loc.start.column
+            location: <SourceLocation>{
+                start: this.node.start,
+                end: this.node.end
             },
         };
     }

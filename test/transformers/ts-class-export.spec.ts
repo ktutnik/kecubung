@@ -10,7 +10,7 @@ describe("TsClassExporterTransformer", () => {
         let ast = JsParser.getAst(`
         MyModule.MyClass = MyClass
         `)
-        let dummy = new TsClassExporterTransformer();
+        let dummy = new TsClassExporterTransformer("ASTree");
         let parent = <Core.ParentMetaData>{
             type: "Module",
             name: "MyModule",
@@ -37,7 +37,7 @@ describe("TsClassExporterTransformer", () => {
             return MyClass;
         }());
         `)
-        let dummy = new TsClassExporterTransformer();
+        let dummy = new TsClassExporterTransformer("ASTree");
         let parent = <Core.ParentMetaData>{
             type: "Module",
             name: "MyModule",

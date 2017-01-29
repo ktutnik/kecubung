@@ -8,7 +8,7 @@ describe("ParameterTransformer", () => {
 
     it("Should identify parameters properly", () => {
         let ast = JsParser.getAst(`function MyFunction(par1, par2){}`)
-        let dummy = new ParameterTransformer();
+        let dummy = new ParameterTransformer("ASTree");
         let parent = <Core.MethodMetaData>{
             type: "Method",
             name: "MyMethod",
@@ -20,7 +20,7 @@ describe("ParameterTransformer", () => {
             type: "Parameter",
             name: "par1",
             location: {
-                column: 20, line: 1
+                start: 20, end: 24
             },
             analysis: Core.AnalysisType.Valid,
         });

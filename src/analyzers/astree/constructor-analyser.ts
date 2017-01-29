@@ -1,4 +1,4 @@
-import * as Core from "../core"
+import * as Core from "../../core"
 
 
 export class ConstructorAnalyzer {
@@ -14,9 +14,9 @@ export class ConstructorAnalyzer {
     }
 
     getLocation() {
-        return {
-            line: this.node.loc.start.line,
-            column: this.node.loc.start.column
+        return <Core.SourceLocation> {
+            start: this.node.start,
+            end: this.node.end
         };
     }
 

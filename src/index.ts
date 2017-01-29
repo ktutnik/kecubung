@@ -1,5 +1,6 @@
 import { Transformer } from "./transformer"
 import { ParentMetaData } from "./core"
+import { ParserType } from "./analyzers"
 export {
     AnalysisType,
     ClassMetaData,
@@ -15,8 +16,10 @@ export {
     TransformerBase
 } from "./core"
 
-export function transform(ast, fileName: string) {
-    let transformer = new Transformer(fileName)
+export function transform(parser: ParserType, ast:any, fileName: string) {
+    let transformer = new Transformer(fileName, parser)
     return transformer.transform(ast);
 }
+
+export {ParserType}
 

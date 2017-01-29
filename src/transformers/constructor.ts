@@ -1,12 +1,17 @@
-import { ConstructorAnalyzer } from "../analyzers/constructor-analyser"
+import * as Analyzer from "../analyzers"
 import { ParameterTransformer } from "./parameter"
 import * as Core from "../core"
 
 
 export class ConstructorTransformer extends Core.TransformerBase {
+    constructor(private parserType: Analyzer.ParserType) {
+        super()
+    }
+
     @Core.Call.when(Core.SyntaxKind.FunctionDeclaration)
     transform(node, parent: Core.ClassMetaData) {
-        let analyser = new ConstructorAnalyzer(node)
+        let analyser = <Analyzer.ConstructorAnalyzer>Analyzer
+            .get(this.parserType, Analyzer.AnalyzerType.Constructor, node)
         if (analyser.isConstructor(parent.name)) {
             let constructor = <Core.ConstructorMetaData>{
                 type: "Constructor",
@@ -17,7 +22,7 @@ export class ConstructorTransformer extends Core.TransformerBase {
             }
             parent.constructor = constructor;
             this.traverse(analyser.getParameters(), constructor, [
-                new ParameterTransformer()
+                new ParameterTransformer(this.parserType)
             ])
         }
     }
