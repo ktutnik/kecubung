@@ -8,7 +8,7 @@ describe("TsChildDecoratorTransformer", () => {
 
     it("Should identify parameter decorator properly", () => {
         let ast = JsParser.getAst(`tslib_1.__param(0, decoOne("param"))`)
-        let dummy = new TsChildDecoratorTransformer();
+        let dummy = new TsChildDecoratorTransformer("ASTree");
         let parent = <Core.MethodMetaData>{
             type: "Method",
             name: "myMethod",
@@ -24,14 +24,14 @@ describe("TsChildDecoratorTransformer", () => {
             name: "decoOne",
             analysis: Core.AnalysisType.Valid,
             location: {
-                column: 0, line: 1
+                start: 0, end: 36
             },
             parameters: [<Core.MetaData>{
                 type:"Parameter",
                 name:"param",
                 analysis: Core.AnalysisType.Valid,
                 location: {
-                    column: 27, line: 1
+                    start: 0, end: 36
                 }
             }]
         });
@@ -39,7 +39,7 @@ describe("TsChildDecoratorTransformer", () => {
 
     it("Should identify method decorator properly", () => {
         let ast = JsParser.getAst(`decoOne("param")`)
-        let dummy = new TsChildDecoratorTransformer();
+        let dummy = new TsChildDecoratorTransformer("ASTree");
         let parent = <Core.MethodMetaData>{
             type: "Method",
             name: "myMethod",
@@ -55,22 +55,22 @@ describe("TsChildDecoratorTransformer", () => {
             name: "decoOne",
             analysis: Core.AnalysisType.Valid,
             location: {
-                column: 0, line: 1
+                start: 0, end: 16
             },
             parameters: [<Core.MetaData>{
                 type:"Parameter",
                 name:"param",
                 analysis: Core.AnalysisType.Valid,
                 location: {
-                    column: 8, line: 1
+                    start: 0, end: 16
                 }
             }]
         });
     })
 
-    it.only("Should identify method decorator with member access", () => {
+    it("Should identify method decorator with member access", () => {
         let ast = JsParser.getAst(`theModule.decoOne("param")`)
-        let dummy = new TsChildDecoratorTransformer();
+        let dummy = new TsChildDecoratorTransformer("ASTree");
         let parent = <Core.MethodMetaData>{
             type: "Method",
             name: "myMethod",
@@ -86,14 +86,14 @@ describe("TsChildDecoratorTransformer", () => {
             name: "decoOne",
             analysis: Core.AnalysisType.Valid,
             location: {
-                column: 0, line: 1
+                start: 0, end: 26
             },
             parameters: [<Core.MetaData>{
                 type:"Parameter",
                 name:"param",
                 analysis: Core.AnalysisType.Valid,
                 location: {
-                    column: 18, line: 1
+                    start: 0, end: 26
                 }
             }]
         });
@@ -101,7 +101,7 @@ describe("TsChildDecoratorTransformer", () => {
 
     it("Should not error if provided __metadata", () => {
         let ast = JsParser.getAst(`tslib_1.__metadata("design:type", Function)`)
-        let dummy = new TsChildDecoratorTransformer();
+        let dummy = new TsChildDecoratorTransformer("ASTree");
         let parent = <Core.MethodMetaData>{
             type: "Method",
             name: "myMethod",

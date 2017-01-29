@@ -16,7 +16,7 @@ describe("TsClassTransformer", () => {
             return MyClass;
         }());
         `)
-        let dummy = new TsClassTransformer();
+        let dummy = new TsClassTransformer("ASTree");
         let parent = <Core.ParentMetaData>{
             type: "Module",
             name: "MyModule",
@@ -30,7 +30,7 @@ describe("TsClassTransformer", () => {
             name: "MyClass",
             baseClass: null,
             location: {
-                column: 8, line: 2
+                start: 9, end: 188
             },
             analysis: Core.AnalysisType.Candidate
             | Core.AnalysisType.HasConstructor
@@ -39,7 +39,7 @@ describe("TsClassTransformer", () => {
                 type: "Constructor",
                 analysis: Core.AnalysisType.Valid,
                 location: {
-                    column: 12, line: 3
+                    start: 50, end: 84
                 },
                 name: "MyClass",
                 parameters: []
@@ -49,14 +49,14 @@ describe("TsClassTransformer", () => {
                 name: "myMethod",
                 analysis: Core.AnalysisType.Valid,
                 location: {
-                    column: 12, line: 5
+                    start: 97, end: 146
                 },
                 parameters: [<Core.ParameterMetaData>{
                     type: "Parameter",
                     name: "par1",
                     analysis: Core.AnalysisType.Valid,
                     location: {
-                        column: 51, line: 5
+                        start: 136, end: 140
                     },
                 }]
             }]
@@ -74,7 +74,7 @@ describe("TsClassTransformer", () => {
             return MyClass;
         }(MyModule.MyBaseClass));
         `)
-        let dummy = new TsClassTransformer();
+        let dummy = new TsClassTransformer("ASTree");
         let parent = <Core.ParentMetaData>{
             type: "Module",
             name: "MyModule",
@@ -88,7 +88,7 @@ describe("TsClassTransformer", () => {
             name: "MyClass",
             baseClass: "MyBaseClass",
             location: {
-                column: 8, line: 2
+                start: 9, end: 312
             },
             analysis: Core.AnalysisType.Candidate
             | Core.AnalysisType.HasConstructor
@@ -97,7 +97,7 @@ describe("TsClassTransformer", () => {
                 type: "Constructor",
                 analysis: Core.AnalysisType.Valid,
                 location: {
-                    column: 12, line: 4
+                    start: 104, end: 188
                 },
                 name: "MyClass",
                 parameters: []
@@ -107,14 +107,14 @@ describe("TsClassTransformer", () => {
                 name: "myMethod",
                 analysis: Core.AnalysisType.Valid,
                 location: {
-                    column: 12, line: 7
+                    start: 201, end: 250
                 },
                 parameters: [<Core.ParameterMetaData>{
                     type: "Parameter",
                     name: "par1",
                     analysis: Core.AnalysisType.Valid,
                     location: {
-                        column: 51, line: 7
+                        start: 240, end: 244
                     },
                 }]
             }]
@@ -125,7 +125,7 @@ describe("TsClassTransformer", () => {
         let ast = JsParser.getAst(`
         exports.MyClass = MyClass
         `)
-        let dummy = new TsClassTransformer();
+        let dummy = new TsClassTransformer("ASTree");
         let parent = <Core.ParentMetaData>{
             type: "Module",
             name: "MyModule",

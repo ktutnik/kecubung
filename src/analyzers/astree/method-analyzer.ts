@@ -1,4 +1,4 @@
-import { SyntaxKind } from "../core"
+import { SyntaxKind, SourceLocation } from "../../core"
 import * as MH from "./helper"
 
 
@@ -8,7 +8,7 @@ export class MethodAnalyzer {
      */
     constructor(private node) { }
 
-    
+
     isMethod(className: String) {
         return this.isMethodStatement()
             && this.node.expression.left.object.object.name == className
@@ -35,6 +35,16 @@ export class MethodAnalyzer {
         else return null;
     }
 
+    getLocation() {
+        return <SourceLocation> {
+            start: this.node.start,
+            end: this.node.end
+        };
+    }
+
+    getParameters(){
+        return this.node.expression.right.params;
+    }
 
     getParams() {
         if (this.isMethodStatement())

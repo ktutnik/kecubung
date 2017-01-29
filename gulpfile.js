@@ -38,8 +38,6 @@ gulp.task("clean", function (cb) {
 //******** BUILD *************
 
 var tsProject = tsc.createProject("tsconfig.json", {
-    declaration: false,
-    noResolve: false,
     typescript: require("typescript")
 });
 
@@ -55,8 +53,6 @@ gulp.task("build-source", function () {
 });
 
 var tsTestProject = tsc.createProject("tsconfig.json", {
-    declaration: false,
-    noResolve: false,
     typescript: require("typescript")
 });
 

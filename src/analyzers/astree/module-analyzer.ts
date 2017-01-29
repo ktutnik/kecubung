@@ -1,4 +1,4 @@
-import { SyntaxKind } from "../core"
+import { SyntaxKind, SourceLocation } from "../../core"
 
 export class ModuleAnalyzer {
     /**
@@ -22,7 +22,7 @@ export class ModuleAnalyzer {
             && this.node.expression.arguments[0].left.name == this.node.expression.callee.params[0].name
     }
 
-    getBody(){
+    getBody() {
         return this.node.expression.callee.body.body;
     }
 
@@ -31,6 +31,13 @@ export class ModuleAnalyzer {
             return this.node.expression.arguments[0].left.name;
         else
             return null;
+    }
+
+    getLocation() {
+        return <SourceLocation>{
+            start: this.node.start,
+            end: this.node.end
+        };
     }
 
     isExported(parentName: string) {

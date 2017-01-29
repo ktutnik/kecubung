@@ -18,11 +18,16 @@ export type MetadataType = "File" | "Module" | "Class"
     | "Method" | "Parameter" | "Decorator" 
     | "Function" | "Constructor"
 
+export interface SourceLocation{
+    start:number, 
+    end:number
+}
+
 export interface MetaData {
     type: MetadataType
     name: string
     analysis: AnalysisType
-    location?: {line: number, column: number}
+    location?: SourceLocation
 }
 
 export interface DecoratorMetaData extends MetaData{

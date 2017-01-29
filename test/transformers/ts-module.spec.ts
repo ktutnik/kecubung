@@ -12,7 +12,7 @@ describe("TsModuleTransformer", () => {
             
         })(ChildModule = MyModule.ChildModule || (MyModule.ChildModule = {}));
         `)
-        let dummy = new TsModuleTransformer();
+        let dummy = new TsModuleTransformer("ASTree");
         let parent = <Core.ParentMetaData>{
             type: "Module",
             name: "MyModule",
@@ -24,7 +24,7 @@ describe("TsModuleTransformer", () => {
             type: "Module",
             name: "ChildModule",
             location: {
-                column: 8, line: 2
+                start: 9, end: 126
             },
             analysis: Core.AnalysisType.Candidate
             | Core.AnalysisType.Exported,
@@ -41,7 +41,7 @@ describe("TsModuleTransformer", () => {
             return MyClass;
         }());
         `)
-        let dummy = new TsModuleTransformer();
+        let dummy = new TsModuleTransformer("ASTree");
         let parent = <Core.ParentMetaData>{
             type: "Module",
             name: "MyModule",

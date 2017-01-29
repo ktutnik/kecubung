@@ -1,10 +1,15 @@
-import { ClassAnalyzer } from "../analyzers/class-analyzer"
+import * as Analyzer from "../analyzers"
 import * as Core from "../core"
 
 
 export class TsClassExporterTransformer extends Core.TransformerBase {
+    constructor(private parserType: Analyzer.ParserType) {
+        super()
+    }
+    
     transform(node, parent: Core.ParentMetaData) {
-        let analyzer = new ClassAnalyzer(node);
+        let analyzer = <Analyzer.ClassAnalyzer>Analyzer
+            .get(this.parserType, Analyzer.AnalyzerType.TSClass, node)
         let parentName = analyzer.getParentName();
         let className = analyzer.getName();
         let clazz:Core.ClassMetaData;

@@ -1,4 +1,4 @@
-import { SyntaxKind } from "../core"
+import { SyntaxKind, SourceLocation } from "../../core"
 import * as HP from "./helper"
 
 export class ClassAnalyzer {
@@ -15,6 +15,18 @@ export class ClassAnalyzer {
         return this.isExportedStatement()
             && (this.node.expression.left.object.name == parentName || this.node.expression.left.object.name == "exports")
             && this.node.expression.right.name == name
+    }
+
+    getLocation() {
+        return <SourceLocation>{
+            start: this.node.start,
+            end: this.node.end
+        };
+    }
+
+    //constructors & methods
+    getMember() {
+        return this.node.declarations[0].init.callee.body.body;
     }
 
     /**
