@@ -28,6 +28,50 @@ describe("TsClassExporterTransformer", () => {
         Chai.expect(Core.flag(clazz.analysis, Core.AnalysisType.Valid)).true
     })
 
+    it("Should identify export class properly", () => {
+        let ast = JsParser.getAst(`
+        exports.MyClass = MyClass
+        `)
+        let dummy = new TsClassExporterTransformer("ASTree");
+        let parent = <Core.ParentMetaData>{
+            type: "File",
+            name: "file.js",
+            analysis: Core.AnalysisType.Valid,
+            children: [<Core.ClassMetaData>{
+                type: "Class",
+                name: "MyClass",
+                analysis: Core.AnalysisType.Candidate | Core.AnalysisType.HasMethod,
+                methods: []
+            }]
+        }
+        dummy.transform(ast, parent);
+        let clazz = <Core.ClassMetaData>parent.children[0];
+        Chai.expect(Core.flag(clazz.analysis, Core.AnalysisType.Exported)).true
+        Chai.expect(Core.flag(clazz.analysis, Core.AnalysisType.Valid)).true
+    })
+
+    it("Should mark as valid if class has no methods", () => {
+        let ast = JsParser.getAst(`
+        exports.MyClass = MyClass
+        `)
+        let dummy = new TsClassExporterTransformer("ASTree");
+        let parent = <Core.ParentMetaData>{
+            type: "File",
+            name: "file.js",
+            analysis: Core.AnalysisType.Valid,
+            children: [<Core.ClassMetaData>{
+                type: "Class",
+                name: "MyClass",
+                analysis: Core.AnalysisType.Candidate,
+                methods: []
+            }]
+        }
+        dummy.transform(ast, parent);
+        let clazz = <Core.ClassMetaData>parent.children[0];
+        Chai.expect(Core.flag(clazz.analysis, Core.AnalysisType.Exported)).true
+        Chai.expect(Core.flag(clazz.analysis, Core.AnalysisType.Valid)).false
+    })
+
     it("Should not error if provided TS class", () => {
         let ast = JsParser.getAst(`
         var MyClass = (function () {

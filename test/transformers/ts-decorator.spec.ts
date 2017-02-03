@@ -95,7 +95,7 @@ describe("TsDecorator", () => {
         });
     })
 
-    
+
 
     it("Should not error if provided TS class", () => {
         let ast = JsParser.getAst(`
@@ -121,5 +121,81 @@ describe("TsDecorator", () => {
         dummy.transform(ast, parent);
         let clazz = <Core.ClassMetaData>parent.children[0];
         Chai.expect(clazz.decorators).undefined;
+    })
+
+    it("Should not error when there is only decorators without classes", () => {
+        let ast = JsParser.getAst(`
+        MyClass = tslib_1.__decorate([
+            decoOne("param"),
+            tslib_1.__metadata("design:paramtypes", [])
+        ], MyClass);
+        `)
+        let dummy = new TsDecorator("ASTree");
+        let parent = <Core.ParentMetaData>{
+            type: "Module",
+            name: "MyModule",
+            analysis: Core.AnalysisType.Candidate
+        }
+        dummy.transform(ast, parent);
+        Chai.expect(parent.children).undefined
+    })
+
+    it("Class decorator detection should not error when there is no match classes in the parent/module", () => {
+        let ast = JsParser.getAst(`
+        MyClass = tslib_1.__decorate([
+            decoOne("param"),
+            tslib_1.__metadata("design:paramtypes", [])
+        ], MyClass);
+        `)
+        let dummy = new TsDecorator("ASTree");
+        let parent = <Core.ParentMetaData>{
+            type: "Module",
+            name: "MyModule",
+            analysis: Core.AnalysisType.Valid,
+            children: [<Core.ClassMetaData>{
+                type: "Class",
+                name: "MyOtherClass",
+                analysis: Core.AnalysisType.Valid,
+                methods: []
+            }]
+        }
+        dummy.transform(ast, parent);
+        let clazz = <Core.ClassMetaData>parent.children[0];
+        Chai.expect(clazz.decorators).undefined
+    })
+
+    it("Method decorator detection should not error when there is no match classes in the parent/module", () => {
+        let ast = JsParser.getAst(`
+        tslib_1.__decorate([
+            decoOne("param"),
+            tslib_1.__param(0, decoOne("param")),
+            tslib_1.__metadata("design:type", Function),
+            tslib_1.__metadata("design:paramtypes", [Object]),
+            tslib_1.__metadata("design:returntype", void 0)
+        ], MyClass.prototype, "myMethod", null);
+        `)
+        let dummy = new TsDecorator("ASTree");
+        let parent = <Core.ParentMetaData>{
+            type: "Module",
+            name: "MyModule",
+            analysis: Core.AnalysisType.Valid,
+            children: [<Core.ClassMetaData>{
+                type: "Class",
+                name: "MyOtherClass",
+                analysis: Core.AnalysisType.Valid,
+                methods: [{
+                    type: "Method",
+                    name: "myMethod",
+                    analysis: Core.AnalysisType.Valid,
+                    parameters: [<Core.ParameterMetaData>{
+                        type: "Parameter",
+                        name: "par1"
+                    }]
+                }]
+            }]
+        }
+        dummy.transform(ast, parent);
+        let clazz = <Core.ClassMetaData>parent.children[0];
+        Chai.expect(clazz.methods[0].decorators).undefined
     })
 })

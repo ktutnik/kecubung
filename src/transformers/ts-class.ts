@@ -21,7 +21,6 @@ export class TsClassTransformer extends Core.TransformerBase {
                 location: analyzer.getLocation(),
                 analysis: Core.AnalysisType.Candidate
             }
-            if(!parent.children) parent.children = []
             parent.children.push(clazz)
             this.traverse(analyzer.getMember(), clazz, [
                 new MethodTransformer(this.parserType),
@@ -35,9 +34,9 @@ export class TsClassTransformer extends Core.TransformerBase {
     private analyse(clazz: Core.ClassMetaData, parent: Core.MetaData, analyzer: Analyzer.ClassAnalyzer) {
         /*
         TS class is not valid *YET* here,
-        validation done on Module/File level
+        validation done on TSClassExport
         */
-        let hasConstructor = clazz.constructor;
+        let hasConstructor = typeof clazz.constructor == "function" ? false : true;
         let hasMethods = clazz.methods && clazz.methods.length > 0;
         if (hasConstructor) clazz.analysis |= Core.AnalysisType.HasConstructor
         if (hasMethods) clazz.analysis |= Core.AnalysisType.HasMethod;

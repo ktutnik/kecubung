@@ -32,6 +32,24 @@ describe("TsModuleTransformer", () => {
         });
     })
 
+    it("Should identify non exported module", () => {
+        let ast = JsParser.getAst(`
+        (function (ChildModule) {
+            
+        })(ChildModule || (ChildModule = {}));
+        `)
+        let dummy = new TsModuleTransformer("ASTree");
+        let parent = <Core.ParentMetaData>{
+            type: "Module",
+            name: "MyModule",
+            analysis: Core.AnalysisType.Valid,
+            children: []
+        }
+        dummy.transform(ast, parent);
+        Chai.expect(Core.flag(parent.children[0].analysis, Core.AnalysisType.Exported)).false;
+        Chai.expect(Core.flag(parent.children[0].analysis, Core.AnalysisType.Valid)).false;
+    })
+
     it("Should not error when provided class", () => {
         let ast = JsParser.getAst(`
         var MyClass = (function () {

@@ -135,4 +135,25 @@ describe("TsClassTransformer", () => {
         dummy.transform(ast, parent);
         Chai.expect(parent.children.length).eq(0);
     })
+
+    it("Should not valid if class without constructor & methods", () => {
+        let ast = JsParser.getAst(`
+        var MyClass = (function () {
+            
+            return MyClass;
+        }());
+        `)
+        let dummy = new TsClassTransformer("ASTree");
+        let parent = <Core.ParentMetaData>{
+            type: "Module",
+            name: "MyModule",
+            analysis: Core.AnalysisType.Valid,
+            children: []
+        }
+        dummy.transform(ast, parent);
+        let clazz = <Core.ClassMetaData>parent.children[0];
+        Chai.expect(Core.flag(clazz, Core.AnalysisType.HasConstructor)).false
+        Chai.expect(Core.flag(clazz, Core.AnalysisType.HasMethod)).false
+        Chai.expect(Core.flag(clazz, Core.AnalysisType.Valid)).false
+    })
 })
