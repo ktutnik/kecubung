@@ -12,8 +12,7 @@ export class TsClassExporterTransformer extends Core.TransformerBase {
             .get(this.parserType, Analyzer.AnalyzerType.TSClass, node)
         let parentName = analyzer.getParentName();
         let className = analyzer.getName();
-        let clazz:Core.ClassMetaData;
-        if (parent.children) clazz = <Core.ClassMetaData>parent.children.filter(x => x.name == className)[0]
+        let clazz = <Core.ClassMetaData>parent.children.filter(x => x.name == className)[0]
         if (clazz && ((parent.type == "File" && parentName == "exports")
             || (parent.type == "Module" && parentName == parent.name))) {
                 clazz.analysis |= Core.AnalysisType.Exported;
