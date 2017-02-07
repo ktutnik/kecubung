@@ -10,17 +10,17 @@ export enum AnalysisType {
     ConnectedWithChildren = 64
 }
 
-export function flag(property, enumeration){
+export function flag(property, enumeration) {
     return (property & enumeration) == enumeration;
 }
 
-export type MetadataType = "File" | "Module" | "Class" 
-    | "Method" | "Parameter" | "Decorator" 
-    | "Function" | "Constructor"
+export type MetadataType = "File" | "Module" | "Class"
+    | "Method" | "Parameter" | "Decorator"
+    | "Function" | "Constructor" | "Property"
 
-export interface SourceLocation{
-    start:number, 
-    end:number
+export interface SourceLocation {
+    start: number,
+    end: number
 }
 
 export interface MetaData {
@@ -30,36 +30,42 @@ export interface MetaData {
     location?: SourceLocation
 }
 
-export interface DecoratorMetaData extends MetaData{
+export interface DecoratorMetaData extends MetaData {
     type: "Decorator"
     parameters: MetaData[]
 }
 
-export interface ParameterMetaData extends MetaData{
+export interface ParameterMetaData extends MetaData {
     type: "Parameter"
     decorators: DecoratorMetaData[]
 }
 
-export interface MethodMetaData extends MetaData{
+export interface MethodMetaData extends MetaData {
     type: "Method"
     decorators: DecoratorMetaData[]
     parameters: ParameterMetaData[]
 }
 
-export interface ConstructorMetaData extends MetaData{
+export interface PropertyMetaData extends MetaData {
+    type: "Property"
+    decorators: DecoratorMetaData[]
+}
+
+export interface ConstructorMetaData extends MetaData {
     type: "Constructor"
     parameters: ParameterMetaData[]
 }
 
-export interface ClassMetaData extends MetaData{
+export interface ClassMetaData extends MetaData {
     type: "Class"
     decorators: DecoratorMetaData[]
-    methods:MethodMetaData[]
-    baseClass:string
+    methods: MethodMetaData[]
+    properties: PropertyMetaData[]
+    baseClass: string
     constructor: ConstructorMetaData
 }
 
-export interface ParentMetaData extends MetaData{
+export interface ParentMetaData extends MetaData {
     type: "Module" | "File"
     children: MetaData[]
 }
@@ -86,6 +92,8 @@ export module SyntaxKind {
     export const BooleanLiteral = "BooleanLiteral"
     export const ClassMethod = "ClassMethod"
     export const ClassExpression = "ClassExpression"
+    export const UnaryExpression = "UnaryExpression"
+    export const NullLiteral = "NullLiteral"
 }
 
 export module Call {
@@ -102,23 +110,23 @@ export module Call {
 }
 
 export abstract class TransformerBase {
-    abstract transform(node, parent:MetaData)
+    abstract transform(node, parent: MetaData)
 
-    protected traverse(children: any[], metaData:MetaData, transformers: TransformerBase[]) {
+    protected traverse(children: any[], metaData: MetaData, transformers: TransformerBase[]) {
         let calls = this.getCalls(transformers)
-        for(let child of children){
-            if(calls.some(x => x == child.type)){
-                for(let transformer of transformers){
+        for (let child of children) {
+            if (calls.some(x => x == child.type)) {
+                for (let transformer of transformers) {
                     transformer.transform(child, metaData)
                 }
             }
         }
     }
 
-    private getCalls(traversers:TransformerBase[]){
-        let calls:string[] = []
-        for(let traverser of traversers){
-            let cal = Call.getWhen(traverser, "transform"); 
+    private getCalls(traversers: TransformerBase[]) {
+        let calls: string[] = []
+        for (let traverser of traversers) {
+            let cal = Call.getWhen(traverser, "transform");
             calls.push(cal)
         }
         return calls;

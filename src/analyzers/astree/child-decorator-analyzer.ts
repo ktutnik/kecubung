@@ -1,12 +1,12 @@
 import { SyntaxKind, MethodMetaData, MetaData, AnalysisType, SourceLocation } from "../../core"
 import * as H from "./helper"
+import * as Base from "../baseclasses"
 
-
-export class ChildDecoratorAnalyzer {
+export class ChildDecoratorAnalyzer implements Base.ChildDecoratorAnalyzer {
     constructor(private node) { }
 
     isMethodDecorator() {
-        return !H.isReservedDecorator(this.node);
+        return !H.isReservedDecorator(this.node)
     }
 
     isParameterDecorator() {
@@ -16,6 +16,7 @@ export class ChildDecoratorAnalyzer {
     getMethodName() {
         return H.getMethodNameFromCallee(this.node.callee);
     }
+
 
     getMethodLocation() {
         return <SourceLocation>{
