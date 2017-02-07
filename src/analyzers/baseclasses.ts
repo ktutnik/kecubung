@@ -35,9 +35,11 @@ export interface ConstructorAnalyzer {
 
 export interface DecoratorAnalyzer {
     isMethodDecorator(): boolean
+    isPropertyDecorator(): boolean
     getClassName(): string
     getMethodName(): string
     isClassDecorator(): boolean
+    getChildren():any[]
 }
 
 export interface FileAnalyzer {

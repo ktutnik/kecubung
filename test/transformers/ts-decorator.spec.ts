@@ -56,6 +56,48 @@ describe("TsDecorator", () => {
         });
     })
 
+    it("Should identify property decorator properly", () => {
+        let ast = JsParser.getAst(`
+        tslib_1.__decorate([
+            decoOne("param"),
+            tslib_1.__param(0, decoOne("param")),
+            tslib_1.__metadata("design:type", Function),
+            tslib_1.__metadata("design:paramtypes", [Object]),
+            tslib_1.__metadata("design:returntype", void 0)
+        ], MyClass.prototype, "myProperty", void 0);
+        `)
+        let dummy = new TsDecorator("ASTree");
+        let parent = <Core.ParentMetaData>{
+            type: "Module",
+            name: "MyModule",
+            analysis: Core.AnalysisType.Valid,
+            children: [<Core.ClassMetaData>{
+                type: "Class",
+                name: "MyClass",
+                analysis: Core.AnalysisType.Valid,
+            }]
+        }
+        dummy.transform(ast, parent);
+        let clazz = <Core.ClassMetaData>parent.children[0];
+        Chai.expect(clazz.properties[0].name).eq("myProperty")
+        Chai.expect(clazz.properties[0].decorators[0]).deep.eq(<Core.DecoratorMetaData>{
+            type: "Decorator",
+            name: "decoOne",
+            analysis: Core.AnalysisType.Valid,
+            location: {
+                start: 42, end: 58
+            },
+            parameters: [<Core.MetaData>{
+                type: "Parameter",
+                name: "param",
+                analysis: Core.AnalysisType.Valid,
+                location: {
+                    start: 42, end: 58
+                }
+            }]
+        });
+    })
+
     it("Should identify class decorator properly", () => {
         let ast = JsParser.getAst(`
         MyClass = tslib_1.__decorate([
@@ -138,6 +180,79 @@ describe("TsDecorator", () => {
         }
         dummy.transform(ast, parent);
         Chai.expect(parent.children).undefined
+    })
+
+    it("Should not error when identify property decorator no class found", () => {
+        let ast = JsParser.getAst(`
+        tslib_1.__decorate([
+            decoOne("param"),
+            tslib_1.__param(0, decoOne("param")),
+            tslib_1.__metadata("design:type", Function),
+            tslib_1.__metadata("design:paramtypes", [Object]),
+            tslib_1.__metadata("design:returntype", void 0)
+        ], MyClass.prototype, "myProperty", void 0);
+        `)
+        let dummy = new TsDecorator("ASTree");
+        let parent = <Core.ParentMetaData>{
+            type: "Module",
+            name: "MyModule",
+            analysis: Core.AnalysisType.Valid,
+            children: [<Core.ClassMetaData>{
+                type: "Class",
+                name: "MyOtherClass",
+                analysis: Core.AnalysisType.Valid,
+            }]
+        }
+        dummy.transform(ast, parent);
+        let clazz = <Core.ClassMetaData>parent.children[0];
+        Chai.expect(clazz.properties).undefined
+    })
+
+    it("Should merge other property properly when identify property decorator", () => {
+        let ast = JsParser.getAst(`
+        tslib_1.__decorate([
+            decoOne("param"),
+            tslib_1.__param(0, decoOne("param")),
+            tslib_1.__metadata("design:type", Function),
+            tslib_1.__metadata("design:paramtypes", [Object]),
+            tslib_1.__metadata("design:returntype", void 0)
+        ], MyClass.prototype, "myProperty", void 0);
+        `)
+        let dummy = new TsDecorator("ASTree");
+        let parent = <Core.ParentMetaData>{
+            type: "Module",
+            name: "MyModule",
+            analysis: Core.AnalysisType.Valid,
+            children: [<Core.ClassMetaData>{
+                type: "Class",
+                name: "MyClass",
+                analysis: Core.AnalysisType.Valid,
+                properties: [<Core.PropertyMetaData>{
+                    type: "Property",
+                    name: "theName",
+                    analysis: Core.AnalysisType.Valid
+                }]
+            }]
+        }
+        dummy.transform(ast, parent);
+        let clazz = <Core.ClassMetaData>parent.children[0];
+        Chai.expect(clazz.properties[1].name).eq("myProperty")
+        Chai.expect(clazz.properties[1].decorators[0]).deep.eq(<Core.DecoratorMetaData>{
+            type: "Decorator",
+            name: "decoOne",
+            analysis: Core.AnalysisType.Valid,
+            location: {
+                start: 42, end: 58
+            },
+            parameters: [<Core.MetaData>{
+                type: "Parameter",
+                name: "param",
+                analysis: Core.AnalysisType.Valid,
+                location: {
+                    start: 42, end: 58
+                }
+            }]
+        });
     })
 
     it("Class decorator detection should not error when there is no match classes in the parent/module", () => {

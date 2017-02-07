@@ -8,7 +8,7 @@ export class TsChildDecoratorTransformer extends Core.TransformerBase {
     }
     
     @Core.Call.when(Core.SyntaxKind.CallExpression)
-    transform(node, parent: Core.MethodMetaData | Core.ClassMetaData) {
+    transform(node, parent: Core.MethodMetaData | Core.ClassMetaData | Core.PropertyMetaData) {
         let analyzers = <Analyzer.ChildDecoratorAnalyzer>Analyzer
             .get(this.parserType, Analyzer.AnalyzerType.ChildDecorator, node)
         if (analyzers.isMethodDecorator()) {
@@ -21,8 +21,8 @@ export class TsChildDecoratorTransformer extends Core.TransformerBase {
             this.transformParameter(analyzers, parameter)
         }
     }
-
-    private transformMethod(analyzer: Analyzer.ChildDecoratorAnalyzer, parent: Core.MethodMetaData | Core.ClassMetaData) {
+    
+    private transformMethod(analyzer: Analyzer.ChildDecoratorAnalyzer, parent: Core.MethodMetaData | Core.ClassMetaData | Core.PropertyMetaData) {
         let method = <Core.DecoratorMetaData>{
             type: "Decorator",
             name: analyzer.getMethodName(),

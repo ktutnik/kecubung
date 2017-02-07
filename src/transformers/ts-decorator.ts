@@ -15,18 +15,45 @@ export class TsDecorator extends Core.TransformerBase {
         if (analyzer.isMethodDecorator()) {
             this.transformMethod(node, parent, analyzer)
         }
+        if(analyzer.isPropertyDecorator()){
+            this.transformProperty(node, parent, analyzer)
+        }
         else if (analyzer.isClassDecorator()) {
             this.transformClass(node, parent, analyzer)
         }
     }
 
-    private transformMethod(node, parent: Core.ParentMetaData, analyzers: Analyzer.DecoratorAnalyzer) {
-        let methodName = analyzers.getMethodName();
-        let className = analyzers.getClassName();
+    private transformProperty(node, parent: Core.ParentMetaData, analyzer: Analyzer.DecoratorAnalyzer) {
+        let methodName = analyzer.getMethodName();
+        let className = analyzer.getClassName();
+        let clazz = <Core.ClassMetaData>parent.children.filter(x => x.name == className)[0];
+        if (clazz) {
+            //property is special, because it only appears only on run time,
+            //so here we add it manually
+            let property:Core.PropertyMetaData = {
+                type: "Property",
+                name: analyzer.getMethodName(), 
+                analysis: Core.AnalysisType.Valid,
+                decorators: [],
+                location: {
+                    end: 0, start: 0
+                }
+            }
+            if(!clazz.properties) clazz.properties = []
+            clazz.properties.push(property)
+            this.traverse(analyzer.getChildren(), property, [
+                new TsChildDecoratorTransformer(this.parserType)
+            ])
+        }
+    }
+
+    private transformMethod(node, parent: Core.ParentMetaData, analyzer: Analyzer.DecoratorAnalyzer) {
+        let methodName = analyzer.getMethodName();
+        let className = analyzer.getClassName();
         let clazz = <Core.ClassMetaData>parent.children.filter(x => x.name == className)[0];
         if (clazz && clazz.methods) {
             let method = clazz.methods.filter(x => x.name == methodName)[0]
-            this.traverse(node.expression.arguments[0].elements, method, [
+            this.traverse(analyzer.getChildren(), method, [
                 new TsChildDecoratorTransformer(this.parserType)
             ])
         }
@@ -36,7 +63,7 @@ export class TsDecorator extends Core.TransformerBase {
         let className = analyzer.getClassName();
         let clazz = <Core.ClassMetaData>parent.children.filter(x => x.name == className)[0];
         if (clazz) {
-            this.traverse(node.expression.right.arguments[0].elements, clazz, [
+            this.traverse(analyzer.getChildren(), clazz, [
                 new TsChildDecoratorTransformer(this.parserType)
             ])
         }
