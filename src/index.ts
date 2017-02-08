@@ -13,7 +13,14 @@ export {
     ParameterMetaData,
     ParentMetaData,
     SyntaxKind,
-    TransformerBase
+    TransformerBase,
+    ArrayValueMetaData,
+    ObjectValueMetaData,
+    PrimitiveValueMetaData,
+    PropertyMetaData,
+    SourceLocation,
+    ValueMetaData,
+    ValueMetaDataType
 } from "./core"
 
 export function transform(parser: ParserType, ast:any, fileName: string) {
