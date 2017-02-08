@@ -1,11 +1,11 @@
 
-function deco(){
+function deco(any?){
     return function(...args){}
 }
 
 module Module{
     class myclass{
-        @deco()
+        @deco({data:"MyData", bool:false})
         myProp:string;
 
         @deco()

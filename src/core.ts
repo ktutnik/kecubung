@@ -18,9 +18,33 @@ export type MetadataType = "File" | "Module" | "Class"
     | "Method" | "Parameter" | "Decorator"
     | "Function" | "Constructor" | "Property"
 
+export type ValueMetaDataType = "Object" | "String" | "Boolean"
+    | "Number" | "Array"
+
 export interface SourceLocation {
     start: number,
     end: number
+}
+
+export interface ValueMetaData {
+    type: ValueMetaDataType
+    name?: string
+    location?: SourceLocation
+}
+
+export interface PrimitiveValueMetaData {
+    type: "String" | "Boolean" | "Number"
+    value: any
+}
+
+export interface ObjectValueMetaData {
+    type: "Object",
+    properties: ValueMetaData[]
+}
+
+export interface ArrayValueMetaData {
+    type: "Object",
+    children: ValueMetaData[]
 }
 
 export interface MetaData {
@@ -32,8 +56,9 @@ export interface MetaData {
 
 export interface DecoratorMetaData extends MetaData {
     type: "Decorator"
-    parameters: MetaData[]
+    parameters: ValueMetaData[]
 }
+
 
 export interface ParameterMetaData extends MetaData {
     type: "Parameter"

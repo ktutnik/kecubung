@@ -45,7 +45,6 @@ export class ChildDecoratorAnalyzer implements Base.ChildDecoratorAnalyzer {
             .map(x => this.getParameter(x));
     }
 
-
     private getParameter(x) {
         return <MetaData>{
             type: "Parameter",
