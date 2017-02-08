@@ -1,8 +1,8 @@
-import { SyntaxKind, MethodMetaData, MetaData, AnalysisType, SourceLocation } from "../core"
+import { SyntaxKind, MethodMetaData, MetaData, ValueMetaData, AnalysisType, SourceLocation } from "../core"
 
 export type ParserType = "ASTree" | "Acorn"
 export enum AnalyzerType {
-    File, Decorator, ChildDecorator, TSClass, TSModule, Constructor, Method, Parameter
+    File, Decorator, ChildDecorator, TSClass, TSModule, Constructor, Method, Parameter, ValueAnalyzer
 }
 
 export interface ChildDecoratorAnalyzer {
@@ -10,10 +10,10 @@ export interface ChildDecoratorAnalyzer {
     isParameterDecorator(): boolean
     getMethodName(): string
     getMethodLocation(): SourceLocation
-    getMethodParameters(): MetaData[]
+    getMethodParameters(): ValueMetaData[]
     getParameterDecoratorName(): string
     getParameterDecoratorLocation(): SourceLocation
-    getParameterDecoratorParameters(): MetaData[]
+    getParameterDecoratorParameters(): ValueMetaData[]
 }
 
 export interface ClassAnalyzer {
@@ -67,4 +67,14 @@ export interface ModuleAnalyzer {
 export interface ParameterAnalyzer {
     getName(): string
     getLocation(): SourceLocation
+}
+
+export interface ValueAnalyzer{
+    isPrimitive()
+    isObject()
+    isArray()
+    isNull()
+    isProperty()
+    getValue()
+    getName()
 }

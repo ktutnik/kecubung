@@ -26,7 +26,7 @@ export class ChildDecoratorAnalyzer implements Base.ChildDecoratorAnalyzer {
     }
 
     getMethodParameters() {
-        return this.node.arguments.map(x => this.getParameter(x));
+        return this.node.arguments.map(x => H.getDecoratorParameterName(x));
     }
 
     getParameterDecoratorName() {
@@ -42,18 +42,7 @@ export class ChildDecoratorAnalyzer implements Base.ChildDecoratorAnalyzer {
 
     getParameterDecoratorParameters() {
         return this.node.arguments[1].arguments
-            .map(x => this.getParameter(x));
+            .map(x => H.getDecoratorParameterName(x));
     }
 
-    private getParameter(x) {
-        return <MetaData>{
-            type: "Parameter",
-            name: H.getDecoratorParameterName(x),
-            analysis: AnalysisType.Valid,
-            location: <SourceLocation>{
-                start: this.node.start,
-                end: this.node.end
-            },
-        };
-    }
 }

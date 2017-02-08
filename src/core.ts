@@ -19,7 +19,7 @@ export type MetadataType = "File" | "Module" | "Class"
     | "Function" | "Constructor" | "Property"
 
 export type ValueMetaDataType = "Object" | "String" | "Boolean"
-    | "Number" | "Array"
+    | "Number" | "Array" | "Null" | "Unknown"
 
 export interface SourceLocation {
     start: number,
@@ -32,18 +32,18 @@ export interface ValueMetaData {
     location?: SourceLocation
 }
 
-export interface PrimitiveValueMetaData {
-    type: "String" | "Boolean" | "Number"
+export interface PrimitiveValueMetaData  extends ValueMetaData{
+    type: "String" | "Boolean" | "Number" | "Null"
     value: any
 }
 
-export interface ObjectValueMetaData {
+export interface ObjectValueMetaData extends ValueMetaData{
     type: "Object",
     properties: ValueMetaData[]
 }
 
-export interface ArrayValueMetaData {
-    type: "Object",
+export interface ArrayValueMetaData extends ValueMetaData {
+    type: "Array",
     children: ValueMetaData[]
 }
 
@@ -119,6 +119,8 @@ export module SyntaxKind {
     export const ClassExpression = "ClassExpression"
     export const UnaryExpression = "UnaryExpression"
     export const NullLiteral = "NullLiteral"
+    export const ObjectExpression = "ObjectExpression"
+    export const ObjectProperty = "ObjectProperty"
 }
 
 export module Call {

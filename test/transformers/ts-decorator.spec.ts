@@ -45,13 +45,9 @@ describe("TsDecorator", () => {
             location: {
                 start: 42, end: 58
             },
-            parameters: [<Core.MetaData>{
-                type: "Parameter",
-                name: "param",
-                analysis: Core.AnalysisType.Valid,
-                location: {
-                    start: 42, end: 58
-                }
+            parameters: [<Core.PrimitiveValueMetaData>{
+                type: "String",
+                value: "param"
             }]
         });
     })
@@ -87,13 +83,9 @@ describe("TsDecorator", () => {
             location: {
                 start: 42, end: 58
             },
-            parameters: [<Core.MetaData>{
-                type: "Parameter",
-                name: "param",
-                analysis: Core.AnalysisType.Valid,
-                location: {
-                    start: 42, end: 58
-                }
+            parameters: [<Core.PrimitiveValueMetaData>{
+                type: "String",
+                value: "param"
             }]
         });
     })
@@ -126,13 +118,9 @@ describe("TsDecorator", () => {
             location: {
                 start: 52, end: 68
             },
-            parameters: [<Core.MetaData>{
-                type: "Parameter",
-                name: "param",
-                analysis: Core.AnalysisType.Valid,
-                location: {
-                    start: 52, end: 68
-                }
+            parameters: [<Core.PrimitiveValueMetaData>{
+                type: "String",
+                value: "param"
             }]
         });
     })
@@ -244,13 +232,9 @@ describe("TsDecorator", () => {
             location: {
                 start: 42, end: 58
             },
-            parameters: [<Core.MetaData>{
-                type: "Parameter",
-                name: "param",
-                analysis: Core.AnalysisType.Valid,
-                location: {
-                    start: 42, end: 58
-                }
+            parameters: [<Core.PrimitiveValueMetaData>{
+                type: "String",
+                value: "param"
             }]
         });
     })
