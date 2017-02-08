@@ -21,5 +21,6 @@ export {
     FileAnalyzer, 
     MethodAnalyzer, 
     ModuleAnalyzer, 
-    ParameterAnalyzer
+    ParameterAnalyzer,
+    ValueAnalyzer
 } from "./baseclasses"

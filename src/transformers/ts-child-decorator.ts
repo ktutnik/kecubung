@@ -20,6 +20,7 @@ export class TsChildDecoratorTransformer extends Core.TransformerBase {
             let parameter = parent.parameters[parseInt(node.arguments[0].value)]
             this.transformParameter(analyzers, parameter)
         }
+        
     }
     
     private transformMethod(analyzer: Analyzer.ChildDecoratorAnalyzer, parent: Core.MethodMetaData | Core.ClassMetaData | Core.PropertyMetaData) {
