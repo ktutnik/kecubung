@@ -84,9 +84,7 @@ gulp.task("mocha", function () {
 
 gulp.task("istanbul:hook", function () {
     return gulp.src(["src/**/**.js"])
-        // Covering files
         .pipe(istanbul())
-        // Force `require` to return covered files
         .pipe(istanbul.hookRequire());
 });
 
