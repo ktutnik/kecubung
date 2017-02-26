@@ -16,6 +16,7 @@ describe("Transformer", () => {
             let dummy = new Transformer(filename, "ASTree");
             let ast = Babylon.parse(code);
             let result = dummy.transform(ast);
+            //console.log(Util.inspect(result.children, false, null))
             Chai.expect(Path.resolve(result.name)).eq(Path.resolve(filename))
             Chai.expect(result.children).deep.eq([{
                 type: 'Module',
@@ -25,14 +26,14 @@ describe("Transformer", () => {
                     type: 'Class',
                     name: 'MyBaseClass',
                     baseClass: null,
-                    location: { start: 456, end: 633 },
+                    location: { start: 519, end: 696 },
                     analysis: 31,
                     constructor:
                     {
                         type: 'Constructor',
                         name: 'MyBaseClass',
                         analysis: 1,
-                        location: { start: 497, end: 531 },
+                        location: { start: 560, end: 594 },
                         parameters: []
                     },
                     methods:
@@ -40,13 +41,13 @@ describe("Transformer", () => {
                         type: 'Method',
                         name: 'baseMethod',
                         analysis: 1,
-                        location: { start: 540, end: 595 },
+                        location: { start: 603, end: 658 },
                         parameters:
                         [{
                             type: 'Parameter',
                             name: 'par1',
                             analysis: 1,
-                            location: { start: 585, end: 589 }
+                            location: { start: 648, end: 652 }
                         }]
                     }]
                 },
@@ -54,14 +55,14 @@ describe("Transformer", () => {
                     type: 'Class',
                     name: 'MyClass',
                     baseClass: 'MyBaseClass',
-                    location: { start: 678, end: 944 },
+                    location: { start: 741, end: 1007 },
                     analysis: 31,
                     constructor:
                     {
                         type: 'Constructor',
                         name: 'MyClass',
                         analysis: 1,
-                        location: { start: 765, end: 841 },
+                        location: { start: 828, end: 904 },
                         parameters: []
                     },
                     methods:
@@ -69,19 +70,19 @@ describe("Transformer", () => {
                         type: 'Method',
                         name: 'myMethod',
                         analysis: 1,
-                        location: { start: 850, end: 899 },
+                        location: { start: 913, end: 962 },
                         parameters:
                         [{
                             type: 'Parameter',
                             name: 'par1',
                             analysis: 1,
-                            location: { start: 889, end: 893 },
+                            location: { start: 952, end: 956 },
                             decorators:
                             [{
                                 type: 'Decorator',
                                 name: 'decoOne',
                                 analysis: 1,
-                                location: { start: 997, end: 1026 },
+                                location: { start: 1060, end: 1089 },
                                 parameters: []
                             }]
                         }],
@@ -90,7 +91,7 @@ describe("Transformer", () => {
                             type: 'Decorator',
                             name: 'decoOne',
                             analysis: 1,
-                            location: { start: 978, end: 987 },
+                            location: { start: 1041, end: 1050 },
                             parameters: []
                         }]
                     }],
@@ -99,16 +100,16 @@ describe("Transformer", () => {
                         type: 'Decorator',
                         name: 'decoTwo',
                         analysis: 1,
-                        location: { start: 1284, end: 1299 },
+                        location: { start: 1347, end: 1362 },
                         parameters: [{ type: 'String', value: 'halo' }]
                     }]
                 }],
-                location: { start: 429, end: 1461 },
+                location: { start: 492, end: 1524 },
                 name: 'MyModule'
             }])
         })
-        
-        it("Should transform TypeScript (4.5 MB) file in less than 1 second", function() {
+
+        it("Should transform TypeScript (4.5 MB) file in less than 1 second", function () {
             this.timeout(10000)
             let filename = "./node_modules/typescript/lib/typescript.js"
             let code = Fs.readFileSync(Path.join(process.cwd(), filename)).toString()
