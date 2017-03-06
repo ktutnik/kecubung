@@ -7,6 +7,7 @@ export class TsClassExporterTransformer extends Core.TransformerBase {
         super()
     }
     
+    @Core.Call.when(Core.SyntaxKind.ExpressionStatement)
     transform(node, parent: Core.ParentMetaData) {
         let analyzer = <Analyzer.ClassAnalyzer>Analyzer
             .get(this.parserType, Analyzer.AnalyzerType.TSClass, node)
@@ -15,9 +16,9 @@ export class TsClassExporterTransformer extends Core.TransformerBase {
         let clazz = <Core.ClassMetaData>parent.children.filter(x => x.name == className)[0]
         if (clazz && ((parent.type == "File" && parentName == "exports")
             || (parent.type == "Module" && parentName == parent.name))) {
-                clazz.analysis |= Core.AnalysisType.Exported;
-                if(Core.flag(clazz.analysis, Core.AnalysisType.HasMethod))
-                    clazz.analysis |= Core.AnalysisType.Valid
+            clazz.analysis |= Core.AnalysisType.Exported;
+            if (Core.flag(clazz.analysis, Core.AnalysisType.HasMethod))
+                clazz.analysis |= Core.AnalysisType.Valid
         }
     }
 }
