@@ -15,3 +15,7 @@ module Module{
         myMethod(){}
     }
 }
+
+export class MyClass{
+    myMethod(){}
+}

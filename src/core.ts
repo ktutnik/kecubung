@@ -32,12 +32,12 @@ export interface ValueMetaData {
     location?: SourceLocation
 }
 
-export interface PrimitiveValueMetaData  extends ValueMetaData{
+export interface PrimitiveValueMetaData extends ValueMetaData {
     type: "String" | "Boolean" | "Number" | "Null"
     value: any
 }
 
-export interface ObjectValueMetaData extends ValueMetaData{
+export interface ObjectValueMetaData extends ValueMetaData {
     type: "Object",
     properties: ValueMetaData[]
 }
@@ -132,7 +132,9 @@ export module Call {
     }
 
     export function getWhen(target, methodName: string) {
-        return <string>Reflect.getMetadata(META_DATA_KEY, target, methodName);
+        let result = <string>Reflect.getMetadata(META_DATA_KEY, target, methodName);
+        if (typeof result == "undefined") throw new Error("Unable to get metadata identifier, try to re-install refrect-metadata module")
+        return result;
     }
 }
 
