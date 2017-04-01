@@ -95,7 +95,7 @@ export interface ParentMetaData extends MetaData {
     children: MetaData[]
 }
 
-export module SyntaxKind {
+export namespace SyntaxKind {
     export const File = "File"
     export const Program = "Program"
     export const BlockStatement = "BlockStatement"

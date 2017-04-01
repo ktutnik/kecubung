@@ -3,6 +3,7 @@ import * as Core from "../core"
 import { TsClassTransformer } from "./ts-class"
 import { TsDecorator } from "./ts-decorator"
 import { TsClassExporterTransformer } from "./ts-class-export"
+import { Es6ClassTransformer } from "./es6-class"
 
 export class TsModuleTransformer extends Core.TransformerBase {
     constructor(private parserType: Analyzer.ParserType) {
@@ -23,6 +24,7 @@ export class TsModuleTransformer extends Core.TransformerBase {
             }
             parent.children.push(module);
             this.traverse(analyzer.getBody(), module, [
+                new Es6ClassTransformer(this.parserType),
                 new TsClassTransformer(this.parserType),
                 new TsModuleTransformer(this.parserType),
                 new TsDecorator(this.parserType),

@@ -45,11 +45,26 @@ gulp.task("build-source", function () {
     return gulp.src([
         "src/**/**.ts"
     ])
-        .pipe(tsProject())
-        .on("error", function (err) {
-            process.exit(1);
-        })
-        .pipe(gulp.dest("src/"));
+    .pipe(tsProject())
+    .on("error", function (err) {
+        process.exit(1);
+    })
+    .pipe(gulp.dest("src/"));
+});
+
+var es6Project = tsc.createProject("tsconfig.es6.json", {
+    typescript: require("typescript")
+});
+
+gulp.task("build-es6", function () {
+    return gulp.src([
+        "test/**/**.es6.ts"
+    ])
+    .pipe(es6Project())
+    .on("error", function (err) {
+        process.exit(1);
+    })
+    .pipe(gulp.dest("test/"));
 });
 
 var tsTestProject = tsc.createProject("tsconfig.json", {

@@ -35,5 +35,85 @@ describe("Transformer", () => {
             console.log("EXEC TIME: " + gap)
             Chai.expect(gap).lessThan(1000)
         })
+
+        it("Should transform ES6 class with namespaces properly", () => {
+            let ast = JsParser.getAst(`
+                var Module;
+                (function (Module) {
+                    class MyClass {
+                        myMethod() { }
+                    }
+                    Module.MyClass = MyClass;
+                })(Module || (Module = {}));
+                class MyClass extends Module.MyClass {
+                    constructor(par1) { super(); }
+                    myMethod() { }
+                }
+                exports.MyClass = MyClass;
+            `, true)
+            let test = new Transformer("file.js", "ASTree")
+            let result = test.transform(ast)
+            Chai.expect(result).deep.eq({
+                type: 'File',
+                name: 'file.js',
+                analysis: 1,
+                children:
+                [{
+                    type: 'Module',
+                    analysis: 66,
+                    children:
+                    [{
+                        type: 'Class',
+                        name: 'MyClass',
+                        baseClass: undefined,
+                        location: { start: 86, end: 162 },
+                        analysis: 31,
+                        methods:
+                        [{
+                            type: 'Method',
+                            name: 'myMethod',
+                            analysis: 1,
+                            location: { start: 126, end: 140 },
+                            parameters: [],
+                            decorators: undefined
+                        }]
+                    }],
+                    location: { start: 45, end: 253 },
+                    name: 'Module'
+                },
+                {
+                    type: 'Class',
+                    name: 'MyClass',
+                    baseClass: 'MyClass',
+                    location: { start: 270, end: 412 },
+                    analysis: 31,
+                    methods:
+                    [{
+                        type: 'Method',
+                        name: 'myMethod',
+                        analysis: 1,
+                        location: { start: 380, end: 394 },
+                        parameters: [],
+                        decorators: undefined
+                    }],
+                    constructor:
+                    {
+                        type: 'Constructor',
+                        name: 'constructor',
+                        analysis: 1,
+                        location: { start: 329, end: 359 },
+                        parameters:
+                        [{
+                            type: 'Parameter',
+                            name: 'par1',
+                            analysis: 1,
+                            location: { start: 341, end: 345 }
+                        }],
+                        decorators: undefined
+                    }
+                }],
+                location: { start: 0, end: 468 }
+            })
+        })
     })
 })
