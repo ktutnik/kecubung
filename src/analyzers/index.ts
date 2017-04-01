@@ -22,5 +22,6 @@ export {
     MethodAnalyzer, 
     ModuleAnalyzer, 
     ParameterAnalyzer,
-    ValueAnalyzer
+    ValueAnalyzer,
+    Es6MemberAnalyzer
 } from "./baseclasses"

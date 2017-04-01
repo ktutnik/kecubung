@@ -2,7 +2,17 @@ import { SyntaxKind, MethodMetaData, MetaData, ValueMetaData, AnalysisType, Sour
 
 export type ParserType = "ASTree" | "Acorn"
 export enum AnalyzerType {
-    File, Decorator, ChildDecorator, TSClass, TSModule, Constructor, Method, Parameter, ValueAnalyzer
+    File, 
+    Decorator, 
+    ChildDecorator, 
+    Es6Class,
+    TSClass, 
+    TSModule, 
+    Constructor, 
+    Method, 
+    Parameter, 
+    ValueAnalyzer,
+    Es6ClassMember
 }
 
 export interface ChildDecoratorAnalyzer {
@@ -77,4 +87,12 @@ export interface ValueAnalyzer{
     isProperty()
     getValue()
     getName()
+}
+
+export interface Es6MemberAnalyzer {
+    getParameters() 
+    getType()
+    getName()
+    isCandidate()
+    getLocation()
 }

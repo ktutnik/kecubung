@@ -6,7 +6,7 @@ export class ClassAnalyzer {
     /**
      * expect VariableDeclaration, ExpressionStatement
      */
-    constructor(private node) { }
+    constructor(protected node) { }
 
     /**
      * expect ExpressionStatement
@@ -32,7 +32,7 @@ export class ClassAnalyzer {
     /**
      * expect ExpressionStatement
      */
-    private isExportedStatement() {
+    protected isExportedStatement() {
         return this.node.type == SyntaxKind.ExpressionStatement
             && this.node.expression.type == SyntaxKind.AssignmentExpression
             && this.node.expression.left.type == SyntaxKind.MemberExpression
