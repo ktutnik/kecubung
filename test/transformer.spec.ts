@@ -115,5 +115,75 @@ describe("Transformer", () => {
                 location: { start: 0, end: 468 }
             })
         })
+
+        it("Should transform ES6 class with decorator properly", () => {
+            let ast = JsParser.getAst(`
+            let CategoryProductController = class CategoryProductController extends kamboja_1.ApiController {
+                constructor() {
+                    super(...arguments);
+                }
+                get(id, categoryId) { }
+            };
+            CategoryProductController = __decorate([
+                kamboja_1.http.root("/categories/:categoryId/products")
+            ], CategoryProductController);
+            exports.CategoryProductController = CategoryProductController;
+            `, true)
+
+            let test = new Transformer("file.js", "ASTree")
+            let result = test.transform(ast)
+            Chai.expect(result).deep.eq({
+                type: 'File',
+                name: 'file.js',
+                analysis: 1,
+                children:
+                [{
+                    type: 'Class',
+                    name: 'CategoryProductController',
+                    baseClass: 'ApiController',
+                    location: { start: 13, end: 256 },
+                    analysis: 31,
+                    methods:
+                    [{
+                        type: 'Method',
+                        name: 'get',
+                        analysis: 1,
+                        location: { start: 218, end: 241 },
+                        parameters:
+                        [{
+                            type: 'Parameter',
+                            name: 'id',
+                            analysis: 1,
+                            location: { start: 222, end: 224 }
+                        },
+                        {
+                            type: 'Parameter',
+                            name: 'categoryId',
+                            analysis: 1,
+                            location: { start: 226, end: 236 }
+                        }],
+                        decorators: undefined
+                    }],
+                    constructor:
+                    {
+                        type: 'Constructor',
+                        name: 'constructor',
+                        analysis: 1,
+                        location: { start: 127, end: 201 },
+                        parameters: [],
+                        decorators: undefined
+                    },
+                    decorators:
+                    [{
+                        type: 'Decorator',
+                        name: 'root',
+                        analysis: 1,
+                        location: { start: 326, end: 381 },
+                        parameters: [{ type: 'String', value: '/categories/:categoryId/products' }]
+                    }]
+                }],
+                location: { start: 0, end: 512 }
+            })
+        })
     })
 })

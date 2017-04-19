@@ -55,6 +55,54 @@ describe("Es6ClassTransformer", () => {
         })
     })
 
+    it("Should transform ES6 Class with declaration style properly", () => {
+        let ast = JsParser.getAst(`
+            let MyClass = class MyClass {
+                constructor(par1) { }
+                myMethod() { }
+            }
+        `)
+        let parent = <Core.ParentMetaData>{
+            type: "Module",
+            name: "MyModule",
+            analysis: Core.AnalysisType.Valid,
+            children: []
+        }
+        let test = new Es6ClassTransformer("ASTree")
+        test.transform(ast, parent)
+        Chai.expect(parent.children[0]).deep.eq({
+            type: 'Class',
+            name: 'MyClass',
+            baseClass: undefined,
+            location: { start: 13, end: 125 },
+            analysis: 14,
+            methods:
+            [{
+                type: 'Method',
+                name: 'myMethod',
+                analysis: 1,
+                location: { start: 97, end: 111 },
+                parameters: [],
+                decorators: undefined
+            }],
+            constructor:
+            {
+                type: 'Constructor',
+                name: 'constructor',
+                analysis: 1,
+                location: { start: 59, end: 80 },
+                parameters:
+                [{
+                    type: 'Parameter',
+                    name: 'par1',
+                    analysis: 1,
+                    location: { start: 71, end: 75 }
+                }],
+                decorators: undefined
+            }
+        })
+    })
+
     it("Should not error if provided different type node", () => {
         let ast = JsParser.getAst(`
             function MyFunction(){}
@@ -90,7 +138,7 @@ describe("Es6ClassTransformer", () => {
             baseClass: undefined,
             location: { start: 13, end: 80 },
             analysis: Core.AnalysisType.Candidate | Core.AnalysisType.HasConstructor,
-            methods:[],
+            methods: [],
             constructor:
             {
                 type: 'Constructor',
