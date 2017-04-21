@@ -11,6 +11,6 @@ namespace Module {
 }
 
 export class MyClass extends Module.MyClass {
-    constructor(par1) { super() }
+    constructor(par1 = 50) { super() }
     myMethod() { }
 }

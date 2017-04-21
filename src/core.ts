@@ -121,6 +121,7 @@ export namespace SyntaxKind {
     export const NullLiteral = "NullLiteral"
     export const ObjectExpression = "ObjectExpression"
     export const ObjectProperty = "ObjectProperty"
+    export const AssignmentPattern = "AssignmentPattern"
 }
 
 export module Call {

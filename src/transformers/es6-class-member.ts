@@ -1,6 +1,7 @@
 
 import * as Analyzer from "../analyzers"
 import { ParameterTransformer } from "./parameter"
+import { ParameterWithDefaultTransformer } from "./parameter-with-default"
 import * as Core from "../core"
 
 
@@ -8,7 +9,7 @@ export class Es6ClassMember extends Core.TransformerBase {
     constructor(private parserType: Analyzer.ParserType) {
         super()
     }
-    
+
     @Core.Call.when(Core.SyntaxKind.ClassMethod)
     transform(node, parent: Core.ClassMetaData) {
         let analyser = <Analyzer.Es6MemberAnalyzer>Analyzer
@@ -23,13 +24,14 @@ export class Es6ClassMember extends Core.TransformerBase {
                 parameters: [],
                 decorators: undefined
             }
-            if(!parent.methods) parent.methods = []
-            if(type == "Method")
+            if (!parent.methods) parent.methods = []
+            if (type == "Method")
                 parent.methods.push(method)
-            if(type == "Constructor")
+            if (type == "Constructor")
                 parent.constructor = method
             this.traverse(analyser.getParameters(), method, [
-                new ParameterTransformer(this.parserType)
+                new ParameterTransformer(this.parserType),
+                new ParameterWithDefaultTransformer(this.parserType)
             ])
         }
     }

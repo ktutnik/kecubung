@@ -185,5 +185,73 @@ describe("Transformer", () => {
                 location: { start: 0, end: 512 }
             })
         })
+
+        it("Should transform ES6 class with default parameter", () => {
+            let ast = JsParser.getAst(`
+                class MyClass {
+                    constructor(par1, par2 = 300){}
+                    myMethod(par1, par2 = 50) { }
+                }
+                exports.MyClass = MyClass;
+            `, true)
+            let test = new Transformer("file.js", "ASTree")
+            let result = test.transform(ast)
+            Chai.expect(result).deep.eq({
+                type: 'File',
+                name: 'file.js',
+                analysis: 1,
+                children:
+                [{
+                    type: 'Class',
+                    name: 'MyClass',
+                    baseClass: undefined,
+                    location: { start: 17, end: 152 },
+                    analysis: 31,
+                    methods:
+                    [{
+                        type: 'Method',
+                        name: 'myMethod',
+                        analysis: 1,
+                        location: { start: 105, end: 134 },
+                        parameters:
+                        [{
+                            type: 'Parameter',
+                            name: 'par1',
+                            analysis: 1,
+                            location: { start: 114, end: 118 }
+                        },
+                        {
+                            type: 'Parameter',
+                            name: 'par2',
+                            analysis: 1,
+                            location: { start: 120, end: 129 }
+                        }],
+                        decorators: undefined
+                    }],
+                    constructor:
+                    {
+                        type: 'Constructor',
+                        name: 'constructor',
+                        analysis: 1,
+                        location: { start: 53, end: 84 },
+                        parameters:
+                        [{
+                            type: 'Parameter',
+                            name: 'par1',
+                            analysis: 1,
+                            location: { start: 65, end: 69 }
+                        },
+                        {
+                            type: 'Parameter',
+                            name: 'par2',
+                            analysis: 1,
+                            location: { start: 71, end: 81 }
+                        }],
+                        decorators: undefined
+                    }
+                }],
+                location: { start: 0, end: 208 }
+            })
+        })
     })
 })
