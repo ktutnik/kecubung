@@ -77,6 +77,7 @@ export interface ModuleAnalyzer {
 export interface ParameterAnalyzer {
     getName(): string
     getLocation(): SourceLocation
+    withDefaultValue():boolean
 }
 
 export interface ValueAnalyzer{

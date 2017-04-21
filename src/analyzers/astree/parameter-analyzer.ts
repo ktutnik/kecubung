@@ -4,8 +4,14 @@ import { SyntaxKind, SourceLocation } from "../../core"
 export class ParameterAnalyzer {
     constructor(private node) { }
 
+    withDefaultValue(){
+        return this.node.type == SyntaxKind.AssignmentPattern
+    }
+
     getName() {
-        return this.node.name;
+        if(this.withDefaultValue())
+            return this.node.left.name
+        else return this.node.name;
     }
 
     getLocation() {
